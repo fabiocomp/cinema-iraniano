@@ -1,0 +1,2757 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cinema Iraniano — Um Guia Cinematográfico</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9973A;
+    --deep-red: #8B1A1A;
+    --midnight: #0D0A0B;
+    --warm-black: #1A1410;
+    --parchment: #F2E8D9;
+    --sand: #D4B896;
+    --sage: #6B7C5E;
+    --ink: #2C1810;
+    --locked: #3a3a3a;
+    --unlocked: var(--deep-red);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--midnight);
+    color: var(--parchment);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 4rem 2rem;
+    background: radial-gradient(ellipse at 50% 60%, #2a1408 0%, var(--midnight) 70%);
+  }
+
+  .hero-bg-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.07;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 60px, var(--gold) 60px, var(--gold) 61px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, var(--gold) 60px, var(--gold) 61px);
+  }
+
+  .hero-ornament {
+    font-size: 5rem;
+    color: var(--gold);
+    opacity: 0.3;
+    letter-spacing: 0.3em;
+    margin-bottom: 1rem;
+    animation: fadeInDown 1.5s ease forwards;
+  }
+
+  .hero-farsi {
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-size: 2.2rem;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 1.5rem;
+    direction: rtl;
+    animation: fadeInDown 1.8s ease forwards;
+  }
+
+  #hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 900;
+    line-height: 1;
+    text-align: center;
+    color: var(--parchment);
+    text-shadow: 0 0 80px rgba(201,151,58,0.3);
+    animation: fadeInUp 1.5s ease forwards;
+  }
+
+  #hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+    display: block;
+  }
+
+  .hero-subtitle {
+    font-size: 1.3rem;
+    color: var(--sand);
+    margin-top: 1.5rem;
+    text-align: center;
+    max-width: 600px;
+    font-style: italic;
+    animation: fadeInUp 2s ease forwards;
+  }
+
+  .hero-divider {
+    width: 180px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 2rem auto;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 1rem 2.5rem;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.4s;
+    text-decoration: none;
+    animation: fadeInUp 2.2s ease forwards;
+  }
+
+  .hero-cta:hover {
+    background: var(--gold);
+    color: var(--midnight);
+  }
+
+  /* ── PROGRESS BAR ── */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--deep-red), var(--gold));
+    z-index: 1000;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  /* ── NAV PHASES ── */
+  #phase-nav {
+    position: fixed;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 500;
+  }
+
+  .phase-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    cursor: pointer;
+    transition: all 0.3s;
+    opacity: 0.4;
+    background: transparent;
+  }
+
+  .phase-dot.unlocked { opacity: 0.7; background: var(--deep-red); }
+  .phase-dot.active { opacity: 1; background: var(--gold); transform: scale(1.4); }
+
+  /* ── SECTIONS ── */
+  .section-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ── INTRO SECTION ── */
+  #intro {
+    padding: 8rem 2rem;
+    background: linear-gradient(180deg, var(--midnight) 0%, var(--warm-black) 100%);
+    position: relative;
+  }
+
+  #intro::before {
+    content: '✦';
+    position: absolute;
+    top: 4rem; left: 50%;
+    transform: translateX(-50%);
+    color: var(--gold);
+    font-size: 1.5rem;
+    opacity: 0.5;
+  }
+
+  .section-label {
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    opacity: 0.8;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 700;
+    color: var(--parchment);
+    margin-bottom: 2.5rem;
+    line-height: 1.2;
+  }
+
+  .section-title em { color: var(--gold); font-style: italic; }
+
+  .drop-cap::first-letter {
+    float: left;
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    line-height: 0.8;
+    color: var(--gold);
+    margin-right: 0.1em;
+    margin-top: 0.05em;
+    font-weight: 900;
+  }
+
+  p { margin-bottom: 1.4rem; color: var(--sand); }
+  p strong { color: var(--parchment); }
+
+  .highlight-box {
+    border-left: 3px solid var(--gold);
+    padding: 1.5rem 2rem;
+    background: rgba(201,151,58,0.06);
+    margin: 2.5rem 0;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--parchment);
+  }
+
+  .directors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin: 2.5rem 0;
+  }
+
+  .director-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,151,58,0.2);
+    padding: 1.5rem;
+    transition: all 0.3s;
+  }
+
+  .director-card:hover {
+    border-color: var(--gold);
+    background: rgba(201,151,58,0.06);
+  }
+
+  .director-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .director-card p { font-size: 0.95rem; margin: 0; }
+
+  /* ── PHASES ── */
+  .phase-section {
+    padding: 6rem 2rem;
+    position: relative;
+    border-top: 1px solid rgba(201,151,58,0.15);
+  }
+
+  .phase-section.locked {
+    opacity: 0.25;
+    pointer-events: none;
+    filter: blur(2px);
+  }
+
+  .phase-section.locked::after {
+    content: '🔒';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    pointer-events: none;
+    backdrop-filter: blur(3px);
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .phase-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 6rem;
+    font-weight: 900;
+    color: var(--deep-red);
+    opacity: 0.4;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .phase-info { flex: 1; }
+
+  .phase-era {
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .phase-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.5rem);
+    font-weight: 700;
+    color: var(--parchment);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  /* ── FILM CARDS ── */
+  .films-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+  }
+
+  .film-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(201,151,58,0.15);
+    overflow: hidden;
+    transition: all 0.4s;
+    cursor: pointer;
+  }
+
+  .film-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .film-poster {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    position: relative;
+    overflow: hidden;
+    background: var(--warm-black);
+  }
+
+  .film-poster img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .film-card:hover .film-poster img {
+    transform: scale(1.05);
+  }
+
+  .film-year-badge {
+    position: absolute;
+    top: 0.8rem; right: 0.8rem;
+    background: var(--deep-red);
+    color: var(--parchment);
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.85rem;
+    padding: 0.2rem 0.6rem;
+    letter-spacing: 0.1em;
+  }
+
+  .film-body { padding: 1.5rem; }
+
+  .film-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--parchment);
+    margin-bottom: 0.3rem;
+  }
+
+  .film-original {
+    font-size: 0.9rem;
+    color: var(--gold);
+    font-style: italic;
+    margin-bottom: 0.8rem;
+  }
+
+  .film-director {
+    font-size: 0.85rem;
+    color: var(--sand);
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+
+  .film-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.7rem;
+    border: 1px solid;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .tag-phil { border-color: #7B9E87; color: #7B9E87; }
+  .tag-pol  { border-color: #C0563B; color: #C0563B; }
+  .tag-psy  { border-color: #8B7BB5; color: #8B7BB5; }
+
+  .film-analysis { display: none; }
+  .film-analysis.open { display: block; }
+
+  .analysis-block {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(201,151,58,0.2);
+  }
+
+  .analysis-block h5 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .analysis-block.phil h5 { color: #7B9E87; }
+  .analysis-block.pol  h5 { color: #C0563B; }
+  .analysis-block.psy  h5 { color: #8B7BB5; }
+
+  .analysis-block p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+    color: var(--sand);
+  }
+
+  .film-toggle {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(201,151,58,0.3);
+    color: var(--gold);
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.9rem;
+    padding: 0.6rem;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    transition: all 0.3s;
+    margin-top: 0.5rem;
+  }
+
+  .film-toggle:hover { background: rgba(201,151,58,0.1); }
+
+  /* ── QUIZ ── */
+  .quiz-section {
+    margin-top: 4rem;
+    padding: 3rem;
+    background: rgba(139,26,26,0.08);
+    border: 1px solid rgba(139,26,26,0.3);
+    position: relative;
+  }
+
+  .quiz-section::before {
+    content: 'QUIZ';
+    position: absolute;
+    top: -0.8rem; left: 2rem;
+    background: var(--deep-red);
+    color: var(--parchment);
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    padding: 0.2rem 1rem;
+  }
+
+  .quiz-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--parchment);
+    margin-bottom: 0.5rem;
+  }
+
+  .quiz-desc {
+    font-size: 0.95rem;
+    color: var(--sand);
+    margin-bottom: 2rem;
+    font-style: italic;
+  }
+
+  .quiz-question {
+    margin-bottom: 2rem;
+  }
+
+  .quiz-question p {
+    font-size: 1.05rem;
+    color: var(--parchment);
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .quiz-options { display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .quiz-option {
+    background: transparent;
+    border: 1px solid rgba(201,151,58,0.2);
+    color: var(--sand);
+    font-family: 'Crimson Pro', serif;
+    font-size: 1rem;
+    padding: 0.8rem 1.2rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    line-height: 1.4;
+  }
+
+  .quiz-option:hover:not(:disabled) {
+    border-color: var(--gold);
+    color: var(--parchment);
+    background: rgba(201,151,58,0.05);
+  }
+
+  .quiz-option.correct {
+    border-color: #6B9E6B;
+    background: rgba(107,158,107,0.1);
+    color: #A0D4A0;
+  }
+
+  .quiz-option.wrong {
+    border-color: var(--deep-red);
+    background: rgba(139,26,26,0.1);
+    color: #C07070;
+  }
+
+  .quiz-option:disabled { cursor: default; }
+
+  .quiz-feedback {
+    margin-top: 0.8rem;
+    font-size: 0.9rem;
+    font-style: italic;
+    display: none;
+    padding: 0.8rem 1rem;
+    border-left: 2px solid;
+  }
+
+  .quiz-feedback.correct { color: #A0D4A0; border-color: #6B9E6B; background: rgba(107,158,107,0.07); display: block; }
+  .quiz-feedback.wrong   { color: #C07070; border-color: var(--deep-red); background: rgba(139,26,26,0.07); display: block; }
+
+  .quiz-progress-text {
+    font-size: 0.9rem;
+    color: var(--sand);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .quiz-score {
+    display: none;
+    text-align: center;
+    padding: 2rem;
+    border: 1px solid var(--gold);
+    background: rgba(201,151,58,0.05);
+    margin-top: 2rem;
+  }
+
+  .quiz-score.visible { display: block; }
+
+  .quiz-score h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .quiz-score p { color: var(--sand); margin: 0; }
+
+  .unlock-btn {
+    display: none;
+    margin: 1.5rem auto 0;
+    padding: 1rem 2.5rem;
+    background: var(--deep-red);
+    border: none;
+    color: var(--parchment);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.4s;
+  }
+
+  .unlock-btn:hover { background: var(--gold); color: var(--midnight); }
+  .unlock-btn.visible { display: block; }
+
+  .score-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    margin: 1rem 0;
+    overflow: hidden;
+  }
+
+  .score-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--deep-red), var(--gold));
+    border-radius: 3px;
+    transition: width 1s ease;
+  }
+
+  /* ── DECORATIVE ── */
+  .ornamental-divider {
+    text-align: center;
+    color: var(--gold);
+    opacity: 0.4;
+    font-size: 1.2rem;
+    letter-spacing: 0.5em;
+    margin: 3rem 0;
+  }
+
+  .phase-bg-1  { background: linear-gradient(180deg, var(--warm-black), #120e08); }
+  .phase-bg-2  { background: linear-gradient(180deg, #0f0c0a, var(--warm-black)); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 4rem 2rem;
+    text-align: center;
+    border-top: 1px solid rgba(201,151,58,0.15);
+    background: var(--midnight);
+  }
+
+  footer p { font-size: 0.9rem; color: rgba(212,184,150,0.4); margin: 0.3rem 0; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--midnight); }
+  ::-webkit-scrollbar-thumb { background: var(--deep-red); }
+
+  /* responsive */
+  @media (max-width: 640px) {
+    .phase-header { flex-direction: column; gap: 0.5rem; }
+    .phase-number { font-size: 3rem; }
+    .films-grid { grid-template-columns: 1fr; }
+    .quiz-section { padding: 1.5rem; }
+    #phase-nav { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- Phase Nav Dots -->
+<nav id="phase-nav">
+  <div class="phase-dot active" data-phase="0" onclick="scrollToPhase(0)" title="Introdução"></div>
+  <div class="phase-dot unlocked" data-phase="1" onclick="scrollToPhase(1)" title="Fase I"></div>
+  <div class="phase-dot" data-phase="2" onclick="scrollToPhase(2)" title="Fase II"></div>
+  <div class="phase-dot" data-phase="3" onclick="scrollToPhase(3)" title="Fase III"></div>
+  <div class="phase-dot" data-phase="4" onclick="scrollToPhase(4)" title="Fase IV"></div>
+  <div class="phase-dot" data-phase="5" onclick="scrollToPhase(5)" title="Fase V"></div>
+  <div class="phase-dot" data-phase="6" onclick="scrollToPhase(6)" title="Fase VI"></div>
+  <div class="phase-dot" data-phase="7" onclick="scrollToPhase(7)" title="Fase VII"></div>
+  <div class="phase-dot" data-phase="8" onclick="scrollToPhase(8)" title="Fase VIII"></div>
+  <div class="phase-dot" data-phase="9" onclick="scrollToPhase(9)" title="Fase IX"></div>
+  <div class="phase-dot" data-phase="10" onclick="scrollToPhase(10)" title="Fase X"></div>
+</nav>
+
+<!-- ═══════════════════════ HERO ═══════════════════════ -->
+<section id="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-ornament">✦ ◆ ✦</div>
+  <div class="hero-farsi">سینمای ایران</div>
+  <h1>Cinema<em>Iraniano</em></h1>
+  <p class="hero-subtitle">Um guia em dez fases para descobrir uma das cinematografias mais singulares, poéticas e politicamente corajosas do mundo</p>
+  <div class="hero-divider"></div>
+  <a href="#intro" class="hero-cta">Iniciar a jornada</a>
+</section>
+
+<!-- ═══════════════════════ INTRO ═══════════════════════ -->
+<section id="intro" data-phase-anchor="0">
+  <div class="section-container">
+
+    <div class="section-label fade-in">A arte que resiste</div>
+    <h2 class="section-title fade-in">A <em>história</em>, a linguagem<br>e o legado do cinema iraniano</h2>
+
+    <p class="drop-cap fade-in">O <strong>cinema iraniano</strong> é uma das grandes surpresas da cultura contemporânea. Originário de um país que viveu revoluções, guerras e censura rigorosa, produziu obras de profundidade filosófica e beleza estética que deixaram os maiores festivais do mundo perplexos. Cannes, Berlim e Veneza assistiram, repetidas vezes, a filmes iranianos vencer suas principais premiações — e não por exotismo, mas por uma qualidade intrínseca raramente encontrada.</p>
+
+    <p class="fade-in">Tudo começou em <strong>1900</strong>, quando Mozaffar ad-Din Shah Qajar trouxe uma câmera da Europa e registrou cerimônias da corte. Mas a verdadeira história começa décadas depois, no encontro entre tradição poética persa milenar e as possibilidades expressivas do cinema moderno. O <em>Novo Cinema Iraniano</em>, que emergiu nos anos 1960 e explodiu após a Revolução de 1979, é talvez o fenômeno mais paradoxal da história do cinema: a censura e as restrições do regime islâmico produziram, involuntariamente, uma linguagem cinematográfica de extraordinária sutileza.</p>
+
+    <div class="highlight-box fade-in">
+      "O cinema iraniano aprendeu a dizer tudo sem dizer nada diretamente. Nisso, tornou-se mestre do não-dito — a linguagem mais poderosa do cinema."
+    </div>
+
+    <h3 class="section-title fade-in" style="font-size:1.8rem; margin-top:3rem;">Características & Linguagem</h3>
+
+    <p class="fade-in">A estética do cinema iraniano se define por alguns traços inconfundíveis. O <strong>realismo poético</strong>: câmeras que acompanham crianças, velhos, animais — a vida comum elevada à dignidade do épico. O <strong>tempo lento</strong>: longas tomadas que ensinam o espectador a olhar de novo. A <strong>metáfora como estratégia de sobrevivência</strong>: quando não se pode falar de política ou amor diretamente, aprende-se a construir imagens que carregam camadas de sentido. A <strong>infância como espelho do mundo adulto</strong>: crianças que percorrem paisagens áridas e buscam objetos perdidos são, na verdade, o Irã inteiro buscando identidade, liberdade, dignidade.</p>
+
+    <p class="fade-in">Há também o uso da <strong>fronteira entre ficção e documentário</strong> — Abbas Kiarostami foi o mestre disso. A câmera que observa sem julgar. O som diegético como textura do real. A chuva, a terra, as montanhas como personagens. Uma recusa sistemática do espetáculo em favor da presença.</p>
+
+    <div class="ornamental-divider">✦ ◆ ✦</div>
+
+    <h3 class="section-title fade-in" style="font-size:1.8rem;">Impacto além das telas</h3>
+
+    <p class="fade-in">O impacto do cinema iraniano vai muito além do cinema. Filósofos como <strong>Jean-Luc Nancy</strong> dedicaram ensaios a Kiarostami. <strong>Jean-Luc Godard</strong> declarou que "o cinema começa com D.W. Griffith e termina com Abbas Kiarostami". O cinema iraniano influenciou gerações de cineastas do sul global, do Brasil à Coreia do Sul, demonstrando que restrição pode ser mãe da criatividade, e que o cinema não precisa de grandes orçamentos para alcançar a alma humana.</p>
+
+    <p class="fade-in">No plano político, filmes iranianos tornaram-se documentos históricos: <em>A Vaca</em> (1969) inaugurou a crítica ao regime do Xá. <em>O Momento da Inocência</em> reflete a gênese da Revolução. <em>Jodaeiye Nader az Simin</em> retrata as contradições da sociedade iraniana contemporânea com precisão cirúrgica. Estas obras não apenas retratam o Irã — elas são o Irã conversando consigo mesmo.</p>
+
+    <h3 class="section-title fade-in" style="font-size:1.8rem; margin-top:3rem;">Os grandes nomes</h3>
+
+    <div class="directors-grid fade-in">
+      <div class="director-card">
+        <h4>Abbas Kiarostami</h4>
+        <p>O poeta supremo. Criador da trilogia de Koker e de <em>Gosto de Cereja</em>. Dissolveu as fronteiras entre cinema e vida com uma câmera que pergunta, em vez de responder.</p>
+      </div>
+      <div class="director-card">
+        <h4>Jafar Panahi</h4>
+        <p>O dissidente. Proibido de filmar pelo governo iraniano, continuou fazendo cinema dentro de carros, apartamentos e telefones. Resistência transformada em linguagem.</p>
+      </div>
+      <div class="director-card">
+        <h4>Mohsen Makhmalbaf</h4>
+        <p>O ex-militante que se tornou cineasta-filósofo. Fundou uma "escola de família" cinematográfica com filhos e esposa. Autor de obras inclassificáveis.</p>
+      </div>
+      <div class="director-card">
+        <h4>Asghar Farhadi</h4>
+        <p>O dramaturgo do cotidiano. Dois Oscars de Melhor Filme Estrangeiro. Mestre dos dilemas morais em sociedades sob pressão institucional.</p>
+      </div>
+      <div class="director-card">
+        <h4>Dariush Mehrjui</h4>
+        <p>O fundador. <em>A Vaca</em> (1969) é considerado o marco inaugural do Novo Cinema Iraniano. Uniu o existencialismo europeu à alma rural iraniana.</p>
+      </div>
+      <div class="director-card">
+        <h4>Samira Makhmalbaf</h4>
+        <p>Estreou com 18 anos em Cannes. Filma o feminino e a infância com uma sabedoria que desafia qualquer categoria. Uma das vozes mais importantes do século XXI.</p>
+      </div>
+    </div>
+
+    <div class="ornamental-divider">✦ ◆ ✦</div>
+    <p class="fade-in" style="text-align:center; font-style:italic; color:var(--gold);">
+      Agora, inicie sua jornada pelas 10 fases do cinema iraniano.<br>
+      Cada fase termina com um quiz. Acerte o suficiente — e o próximo capítulo se abrirá.
+    </p>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════ PHASE 1 ═══════════════════════ -->
+<section class="phase-section phase-bg-1 fade-in" id="phase-1" data-phase-anchor="1">
+  <div class="section-container">
+    <div class="phase-header">
+      <div class="phase-number">I</div>
+      <div class="phase-info">
+        <div class="phase-era">1900 – 1960</div>
+        <h2 class="phase-title">As Origens: da Câmera do Xá ao<br><em>cinema mudo e os primeiros passos</em></h2>
+        <p>O cinema chegou ao Irã como curiosidade aristocrática em 1900 e levou décadas para encontrar sua voz própria. Este período inaugural é marcado por importação de modelos ocidentais, censura moral e os primeiros lampejos de uma identidade cinematográfica persa.</p>
+      </div>
+    </div>
+
+    <p>Em <strong>1900</strong>, Mozaffar ad-Din Shah Qajar retornou de uma viagem à França trazendo consigo uma câmera cinematográfica e um operador. As primeiras imagens iranianas registram flores, jardins e a corte — o real como espetáculo do poder. O cinema era brinquedo de reis.</p>
+
+    <p>A <strong>primeira sala de cinema pública</strong> iraniana foi inaugurada em Teerã em 1904, operada por Mirza Ebrahim Khan Sahaf-Bashi, um comerciante que viu no cinema um negócio e um projeto de modernidade. A aristocracia frequentava; o clero condenava. Esta tensão estrutural entre modernização e tradição islâmica marcaria toda a história subsequente.</p>
+
+    <p>Os anos 1930 e 40 trouxeram o <strong>cinema sonoro</strong> e os primeiros longas iranianos. <em>Dokhtar-e Lor</em> (A Moça de Lor, 1932), filmado na Índia, é considerado o primeiro filme sonoro persa. Melodramas, musicais e adaptações folclóricas dominaram a produção — o chamado <em>Film Farsi</em>, um cinema popular e comercial de apelo amplo.</p>
+
+    <p>O <strong>Film Farsi</strong> era exuberante, emocional, tributário do cinema egípcio e indiano: danças, músicas, amores impossíveis, heróis musculosos, vilões caricatos. Mas já continha, em germe, a relação do cinema iraniano com a narrativa oral, com o <em>dastan</em> (história contada), com a poesia como substrato emocional.</p>
+
+    <div class="highlight-box">
+      O cinema iraniano nasceu entre dois mundos impossíveis: a modernidade ocidental e a tradição islâmica. Esta tensão nunca se resolveu — e dela brotou uma das cinematografias mais ricas do mundo.
+    </div>
+
+    <div class="films-grid">
+
+      <!-- FILM 1 -->
+      <div class="film-card">
+        <div class="film-poster" style="background: #1a0e08; padding:0; overflow:hidden; position:relative;">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Dokhtar-e_Lor_poster.jpg/400px-Dokhtar-e_Lor_poster.jpg" alt="Dokhtar-e Lor" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0e08,#3d1f0a)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.85;">
+          <div class="film-year-badge">1932</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">A Moça de Lor</div>
+          <div class="film-original">Dokhtar-e Lor</div>
+          <div class="film-director">Dir: Ardeshir Irani & Abdolhossein Sepanta</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-pol">Política</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>O filme encena o confronto entre a <em>identidade autóctone</em> (a moça lur, pura, rural) e a corrupção urbana — um tema que ressoará em toda a filosofia política iraniana. A pureza como valor ontológico, ameaçada pelo progresso sem raízes, antecipa Heidegger lido em chave persa.</p>
+            </div>
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>Produzido durante o reinado de Reza Shah Pahlavi, o filme oscila entre a celebração da modernização forçada e a nostalgia de uma iranianidade rural. A heroína lur funciona como símbolo da "alma persa" que o modernismo estatal não consegue — nem quer — apagar completamente.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>Estruturalmente, o filme opera no registro do trauma colonial invertido: o Oriente que se vê através dos olhos do Ocidente, e que só consegue narrar a si mesmo usando as formas narrativas do colonizador. Um Complexo de Inferioridade coletivo encenado como melodrama musical.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILM 2 -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1590172205940-e0f3b6766fe0?w=600&q=80&fit=crop" alt="Iran landscape 1940s" onerror="this.parentElement.style.background='linear-gradient(135deg,#0e1a12,#1a3d20)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.75;">
+          <div class="film-year-badge">1948</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">Tempestade da Vida</div>
+          <div class="film-original">Toufan-e Zendegi</div>
+          <div class="film-director">Dir: Ali Daryabeigi</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>O existencialismo persa avant la lettre: personagens arremessados num mundo que não escolheram, tentando construir sentido numa sociedade em transição acelerada. A "tempestade" do título é metáfora da modernidade como condição irresolvível.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>O melodrama familiar persa carrega uma psicologia coletiva específica: a honra como organizador central da subjetividade. Todo conflito, no fundo, é um conflito de <em>aberoo</em> (reputação/face) — um sistema narcísico de grupo onde o self individual só existe em relação à mirada comunitária.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILM 3 -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=600&q=80&fit=crop" alt="Tehran street" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a1208,#3d2e0a)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.7;filter:grayscale(40%);">
+          <div class="film-year-badge">1959</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">O Sul da Cidade</div>
+          <div class="film-original">Jonub-e Shahr</div>
+          <div class="film-director">Dir: Farrokh Ghaffari</div>
+          <div class="film-tags">
+            <span class="tag tag-pol">Política</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>Primeiro filme iraniano a representar a classe trabalhadora urbana como sujeito político — e não como pano de fundo colorido. Ghaffari, formado em Paris, trouxe os métodos do neorrealismo italiano para os becos de Teerã, denunciando a fratura social do "desenvolvimento" dos Pahlavis.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>A divisão Norte/Sul da cidade funciona como mapa psicossocial da cisão iraniana: o Norte moderno, ocidentalizado, reprimido no seu afeto; o Sul pulsante, pobre, culturalmente rico. Uma topografia do inconsciente coletivo iraniano.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /films-grid -->
+
+    <!-- QUIZ 1 -->
+    <div class="quiz-section" id="quiz-1">
+      <h3 class="quiz-title">Quiz — Fase I</h3>
+      <p class="quiz-desc">Grau de dificuldade: <strong>DIFÍCIL</strong>. São 3 perguntas. Acerte pelo menos 2 para desbloquear a próxima fase.</p>
+      <div id="quiz-1-content">
+        <div class="quiz-progress-text" id="quiz-1-progress">Pergunta 1 de 3</div>
+        <div id="quiz-1-questions"></div>
+      </div>
+      <div class="quiz-score" id="quiz-1-score">
+        <h3 id="quiz-1-score-title"></h3>
+        <div class="score-bar"><div class="score-fill" id="quiz-1-score-bar"></div></div>
+        <p id="quiz-1-score-text"></p>
+        <button class="unlock-btn" id="quiz-1-unlock" onclick="unlockPhase(2)">Desbloquear Fase II →</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════ PHASE 2 ═══════════════════════ -->
+<section class="phase-section phase-bg-2 locked fade-in" id="phase-2" data-phase-anchor="2">
+  <div class="section-container">
+    <div class="phase-header">
+      <div class="phase-number">II</div>
+      <div class="phase-info">
+        <div class="phase-era">1960 – 1978</div>
+        <h2 class="phase-title">O Novo Cinema Iraniano:<br><em>o nascimento de uma voz própria</em></h2>
+        <p>Os anos 1960-70 testemunham a ruptura definitiva com o Film Farsi e o surgimento de um cinema de autor iranian, influenciado pelo Neorrealismo, Nouvelle Vague e pela tradição poética persa. É a era de Mehrjui, Kimiai, Beizai e do jovem Kiarostami.</p>
+      </div>
+    </div>
+
+    <p>Em <strong>1969</strong>, Dariush Mehrjui lança <em>A Vaca</em> e muda tudo. Não era mais possível fingir que o cinema iraniano era apenas entretenimento comercial. <em>A Vaca</em> era Kafka na aldeia, Beckett nos campos de trigo: um homem que, ao perder sua vaca, perde a si mesmo, torna-se a vaca. A alegoria existencial e social estava ali, nua, perturbadora.</p>
+
+    <p>O mesmo ano viu surgir <em>O Vagabundo</em> (Masoud Kimiai), uma ode ao código de honra masculino nas margens da cidade — uma masculinidade ferida e bela que o cinema iraniano continuaria a explorar. Mas foi o ambiente intelectual do final dos anos 60 que criou as condições: o Instituto para o Desenvolvimento Intelectual de Crianças e Jovens (Kanoon) financiava filmes de autor; a fermentação política anti-Pahlavi gerava energia criativa.</p>
+
+    <p>A <strong>revolução cinematográfica</strong> dos anos 70 produziu filmes sobre a fratura entre tradição e modernidade, sobre a violência estrutural do subdesenvolvimento, sobre a dignidade dos humilhados. <strong>Bahram Beizai</strong> investigava a mitologia persa pré-islâmica. <strong>Abbas Kiarostami</strong> fazia seus primeiros curtas no Kanoon — e já demonstrava a visão que o tornaria lendário.</p>
+
+    <div class="highlight-box">
+      O Novo Cinema Iraniano nasceu sob censura do regime do Xá e sobreviveu à censura do regime islâmico — duas formas diferentes de silêncio, que produziram duas formas diferentes de eloquência.
+    </div>
+
+    <div class="films-grid">
+
+      <!-- A VACA -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&q=80&fit=crop&crop=center" alt="Rural Iran field" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a1208,#2d1e06)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.75;filter:sepia(30%);">
+          <div class="film-year-badge">1969</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">A Vaca</div>
+          <div class="film-original">Gav</div>
+          <div class="film-director">Dir: Dariush Mehrjui</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-pol">Política</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>A metamorfose do homem em vaca é uma das mais poderosas encenações cinematográficas do problema da identidade. Seguindo Kafka, Mehrjui demonstra que a identidade humana é mais frágil do que pensamos: ela depende das relações que nos sustentam. Retirada a vaca — o único outro que o reconhecia — Masht Hassan dissolve-se ontologicamente.</p>
+            </div>
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>Banido pelo governo do Xá antes de ser ironicamente liberado após a Revolução (o Aiatolá Khomeini o elogiou como retrato do sofrimento camponês), o filme é a crítica mais aguda ao modelo de desenvolvimento rural dos Pahlavis: uma modernização que destroçava os laços comunitários tradicionais sem oferecer substitutos dignos.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>Do ponto de vista winnicottiano, a vaca é o <em>objeto transicional</em> do protagonista adulto — o objeto que medeia entre seu self e o mundo externo. Sua perda não é apenas econômica; é a perda do espaço potencial, do sentido de continuidade do ser. A psicose resultante é a resposta lógica a uma destruição do self-relacional.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- O VAGABUNDO -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1603796846097-bee99e4a601f?w=600&q=80&fit=crop" alt="Urban alley night" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0a0a,#3d1515)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.65;filter:grayscale(50%);">
+          <div class="film-year-badge">1969</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">O Vagabundo</div>
+          <div class="film-original">Qeysar</div>
+          <div class="film-director">Dir: Masoud Kimiai</div>
+          <div class="film-tags">
+            <span class="tag tag-pol">Política</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>Qeysar opera fora do estado, fora da lei — não por bandidagem, mas porque o estado falhou. A vingança privada como resposta à falência das instituições é um tema profundamente político: a deslegitimação do estado através do melodrama, que prefigura a erosão do regime Pahlavi.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>O código de <em>javanmardi</em> (cavaleirismo) que Qeysar encarna é um sistema de regulação narcísica coletiva: a honra da família como extensão do ego grupal. A violência do protagonista é psicologicamente compreensível dentro desta estrutura, mas o filme tem a sabedoria de mostrar seu custo — a autodestruição como único desfecho possível.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- O RELATÓRIO -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80&fit=crop" alt="City buildings bureaucracy" onerror="this.parentElement.style.background='linear-gradient(135deg,#0a0a1a,#151540)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.6;filter:grayscale(40%);">
+          <div class="film-year-badge">1977</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">O Relatório</div>
+          <div class="film-original">Gozaresh</div>
+          <div class="film-director">Dir: Abbas Kiarostami</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>O segundo longa de Kiarostami já antecipa seu método maduro: a câmera como olhar ético, não julgador. A história de um burocrático falho e de seu casamento se desintegrando é filosoficamente sobre a incomunicabilidade e sobre como as instituições (o estado, o casamento) produzem sujeitos incapazes de presença autêntica.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>O protagonista exibe o que hoje chamaríamos de alexitimia — incapacidade de reconhecer e nomear emoções próprias. O cinema de Kiarostami, desde o início, é uma investigação da psicologia do homem iraniano de classe média: reprimido, cindido entre performances públicas e vazio privado.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- QUIZ 2 -->
+    <div class="quiz-section" id="quiz-2">
+      <h3 class="quiz-title">Quiz — Fase II</h3>
+      <p class="quiz-desc">Grau de dificuldade: <strong>DIFÍCIL</strong>. 3 perguntas. Acerte pelo menos 2 para avançar.</p>
+      <div id="quiz-2-content">
+        <div class="quiz-progress-text" id="quiz-2-progress">Pergunta 1 de 3</div>
+        <div id="quiz-2-questions"></div>
+      </div>
+      <div class="quiz-score" id="quiz-2-score">
+        <h3 id="quiz-2-score-title"></h3>
+        <div class="score-bar"><div class="score-fill" id="quiz-2-score-bar"></div></div>
+        <p id="quiz-2-score-text"></p>
+        <button class="unlock-btn" id="quiz-2-unlock" onclick="unlockPhase(3)">Desbloquear Fase III →</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════ PHASE 3 ═══════════════════════ -->
+<section class="phase-section phase-bg-1 locked fade-in" id="phase-3" data-phase-anchor="3">
+  <div class="section-container">
+    <div class="phase-header">
+      <div class="phase-number">III</div>
+      <div class="phase-info">
+        <div class="phase-era">1979 – 1984</div>
+        <h2 class="phase-title">A Revolução e o Silêncio:<br><em>reconstruindo o cinema sob o Islã</em></h2>
+        <p>A Revolução Islâmica de 1979 fecha cinemas, queima negativos e reconfigura radicalmente o que pode e o que não pode ser mostrado. Paradoxalmente, este período de silêncio e restrição prepara o terreno para o florescimento dos anos 80 e 90.</p>
+      </div>
+    </div>
+
+    <p>Em fevereiro de 1979, <strong>Khomeini</strong> retornou do exílio e a República Islâmica foi proclamada. Para o cinema, foi o fim de um mundo. As salas de cinema tinham sido alvos preferenciais dos revolucionários — o cinema era símbolo da corrupção ocidental e da decadência Pahlavi. Centenas de cinemas foram incendiados; a tragédia do <strong>Cinema Rex em Abadan</strong> (1978, 477 mortos) havia catalisado a revolução.</p>
+
+    <p>O novo estado islâmico não queria destruir o cinema — queria <strong>islamizá-lo</strong>. O Ministério da Cultura e Orientação Islâmica passou a controlar cada roteiro, cada cena, cada ator. Mulheres deveriam usar hijab em cena (mesmo em ambientes domésticos privados — uma absurdidade lógica aceita como convenção). Contato físico entre homem e mulher era proibido. A morte não podia ser mostrada diretamente.</p>
+
+    <p>E foi desta série de impossibilidades que nasceu o <strong>estilo mais reconhecível do cinema iraniano</strong>: a metáfora, a elipse, o fora-de-campo. Se não posso mostrar, mostro o que não posso mostrar mostrando sua ausência. A censura inventou uma linguagem.</p>
+
+    <div class="highlight-box">
+      A Revolução proibiu o cinema que existia. Os cineastas iranianos inventaram um cinema novo dentro dos limites do proibido — e esse cinema novo era mais profundo, mais político, mais humano que o anterior.
+    </div>
+
+    <div class="films-grid">
+
+      <!-- THE CYCLE -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&fit=crop" alt="Hospital dramatic scene" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0808,#2d0e0e)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.65;filter:sepia(40%) hue-rotate(320deg);">
+          <div class="film-year-badge">1979</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">O Ciclo</div>
+          <div class="film-original">Dayereh Mina</div>
+          <div class="film-director">Dir: Dariush Mehrjui</div>
+          <div class="film-tags">
+            <span class="tag tag-pol">Política</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>Filmado antes da revolução, lançado durante ela: a ironia histórica é total. O filme expõe a exploração capitalista dos pobres iranianos (venda de sangue como metáfora do extrativismo social) num momento em que a revolução prometia acabar com essa exploração. A pergunta implícita: a revolução resolverá o que o filme denuncia?</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>O sistema de venda de sangue do filme opera como metáfora da dependência — os personagens são literalmente dependentes de vender a substância vital de seus corpos para sobreviver. Psicologicamente, é um retrato do trauma geracional da pobreza: quando o corpo é o único capital disponível.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- THE SCHOOL WE WENT TO -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&q=80&fit=crop" alt="Children school" onerror="this.parentElement.style.background='linear-gradient(135deg,#081a08,#103010)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.7;filter:grayscale(30%);">
+          <div class="film-year-badge">1980</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">A Escola em que Estudávamos</div>
+          <div class="film-original">Madreseye ke miraftim</div>
+          <div class="film-director">Dir: Abbas Kiarostami</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>Kiarostami usa crianças como filtro filosófico do mundo adulto — as crianças veem o real com olhos não colonizados pela ideologia. A escola é o espaço onde a ideologia se instala nos corpos e nas mentes; filmar a infância na escola é filmar o momento da sujeição ao poder institucional.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>A câmera respeitosa e não manipuladora de Kiarostami com crianças tem algo de terapêutico: ela oferece às crianças filmadas (e ao espectador) o raro presente de serem vistas sem serem julgadas. É a encenação de uma experiência de presença plena — o oposto do olhar avaliativo das instituições.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- THE RUNNER -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80&fit=crop" alt="Child running road" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a1208,#2d2010)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.75;filter:sepia(20%);">
+          <div class="film-year-badge">1984</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">O Corredor</div>
+          <div class="film-original">Davandeh</div>
+          <div class="film-director">Dir: Amir Naderi</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-pol">Política</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>Amiro corre. Não para algum lugar — ele simplesmente corre, com uma intensidade que parece mística. Naderi filma o desejo puro, o impulso vital antes de qualquer objeto. É cinema como fenomenologia da vontade: não importa para onde, importa a potência do movimento. Nietzsche em shorts rasgados numa ilha portuária.</p>
+            </div>
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>O menino de rua que corre entre os destroços de um porto iraniano durante a guerra com o Iraque — a corrida é a única forma de agência disponível ao excluído. A política de Naderi é corporal: resistência como pura cinética, quando todas as vias institucionais estão bloqueadas.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- QUIZ 3 -->
+    <div class="quiz-section" id="quiz-3">
+      <h3 class="quiz-title">Quiz — Fase III</h3>
+      <p class="quiz-desc">Grau de dificuldade: <strong>DIFÍCIL</strong>. 3 perguntas. Acerte pelo menos 2 para avançar.</p>
+      <div id="quiz-3-content">
+        <div class="quiz-progress-text" id="quiz-3-progress">Pergunta 1 de 3</div>
+        <div id="quiz-3-questions"></div>
+      </div>
+      <div class="quiz-score" id="quiz-3-score">
+        <h3 id="quiz-3-score-title"></h3>
+        <div class="score-bar"><div class="score-fill" id="quiz-3-score-bar"></div></div>
+        <p id="quiz-3-score-text"></p>
+        <button class="unlock-btn" id="quiz-3-unlock" onclick="unlockPhase(4)">Desbloquear Fase IV →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ PHASE 4 ═══════════════════════ -->
+<section class="phase-section phase-bg-2 locked fade-in" id="phase-4" data-phase-anchor="4">
+  <div class="section-container">
+    <div class="phase-header">
+      <div class="phase-number">IV</div>
+      <div class="phase-info">
+        <div class="phase-era">1985 – 1991</div>
+        <h2 class="phase-title">A Guerra e a Poesia:<br><em>Kiarostami, Makhmalbaf e o florescimento</em></h2>
+        <p>A guerra Irã-Iraque (1980-88) produz um cinema sobre a morte e a vida com intensidade raramente vista. Kiarostami estreia sua trilogia de Koker. Makhmalbaf abandona o islamismo militante e descobre a arte. Nasce um cinema capaz de falar de tudo falando de crianças, de viagens, de cerises.</p>
+      </div>
+    </div>
+
+    <p>A guerra contra o Iraque produziu um paradoxo: um cinema oficial de propaganda patriótica e um cinema de autor que usava a guerra como pano de fundo para investigar questões filosóficas sobre vida, morte e continuidade. A criança que busca o caderno de seu colega morto (Kiarostami) e o mendigo que toca música nas ruínas (Makhmalbaf) são mais verdadeiros que qualquer propaganda.</p>
+
+    <p>É neste período que <strong>Abbas Kiarostami</strong> realiza sua ascensão definitiva. <em>Onde Fica a Casa do Meu Amigo?</em> (1987) inaugura a trilogia de Koker — filmes rodados em aldeias do norte iraniano com atores não profissionais, câmera que segue o movimento real, história que parece simples e é profunda. A jornada de uma criança que quer devolver um caderno ao colega é uma epopeia moral filmada como documentário de observação.</p>
+
+    <p>Mohsen Makhmalbaf passou por uma transformação radical: ex-militante islâmico que havia esfaqueado um policial aos 17 anos, passou anos na prisão, foi libertado pela revolução — e então descobriu que a revolução havia fracassado. Tornou-se cineasta e começou a fazer filmes que denunciavam os mesmos problemas que a revolução prometia resolver.</p>
+
+    <div class="films-grid">
+
+      <!-- WHERE IS THE FRIEND'S HOME -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80&fit=crop&crop=bottom" alt="Winding path village Iran" onerror="this.parentElement.style.background='linear-gradient(135deg,#081820,#102838)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.8;filter:sepia(15%);">
+          <div class="film-year-badge">1987</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">Onde Fica a Casa do Meu Amigo?</div>
+          <div class="film-original">Khane-ye doust kojast?</div>
+          <div class="film-director">Dir: Abbas Kiarostami</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-pol">Política</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>A busca do caderno é uma jornada ética: Ahmad sabe o que é certo e age segundo esse saber, contra os obstáculos dos adultos. Kiarostami filma a ética kantiana em ato — o imperativo categórico encarnado numa criança de oito anos. A pergunta filosófica central: por que agir bem quando ninguém obriga? A resposta do filme: porque a consciência moral é anterior a qualquer lei externa.</p>
+            </div>
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>O mundo adulto do filme é uma série de obstáculos burocráticos e indiferentes: o pai que manda o filho para casa, os velhos que não ajudam, o professor autoritário. As instituições (família, escola) falham a criança repetidamente. A única ajuda genuína vem de um velho artesão — fora das estruturas de poder. Uma crítica suave e devastadora ao autoritarismo institucional iraniano.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>A odisseia de Ahmad é psicologicamente sobre a construção da consciência moral na criança — o desenvolvimento da capacidade de empatia (sentir pelo colega que pode perder o caderno) e de agência (agir para remediar). Winnicott diria que Ahmad está num estágio de <em>concern</em> — capacidade de sentir-se responsável pelo outro, marca da maturidade emocional.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- THE PEDDLER -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=600&q=80&fit=crop&crop=top" alt="Street vendor Tehran" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0e0e,#301818)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.65;filter:grayscale(30%);">
+          <div class="film-year-badge">1987</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">O Vendedor Ambulante</div>
+          <div class="film-original">Dastforoush</div>
+          <div class="film-director">Dir: Mohsen Makhmalbaf</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-pol">Política</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>Makhmalbaf, no seu período de transição, filma três histórias sobre a miséria urbana com uma crueza próxima do naturalismo. A filosofia subjacente é a de um anti-idealismo radical: não há redenção, não há revolução que baste, há apenas corpos humanos lutando para sobreviver num sistema que os devora. O reverso amargo de toda teleologia revolucionária.</p>
+            </div>
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>O ex-militante islâmico filmando a pobreza oito anos após a revolução que supostamente libertaria os pobres: a ironia política é a forma do filme. Makhmalbaf não precisa explicitar a crítica — a realidade filmada fala por si. É cinema como testemunho da promessa não cumprida.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BASHU -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80&fit=crop" alt="Iranian northern forest nature" onerror="this.parentElement.style.background='linear-gradient(135deg,#0a1a0a,#143014)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.8;">
+          <div class="film-year-badge">1989</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">Bashu, o Pequeno Estranho</div>
+          <div class="film-original">Bashu, gharibeh-ye kuchak</div>
+          <div class="film-director">Dir: Bahram Beizai</div>
+          <div class="film-tags">
+            <span class="tag tag-pol">Política</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>Um menino árabe do sul, fugindo dos bombardeios iraquianos, encontra acolhida numa família camponesa do norte gilani — dois mundos iranianos que nunca se encontraram. Beizai faz política da diversidade: o Irã que o estado invoca como unidade monolítica é, na realidade, uma multiplicidade de línguas, cores e culturas. Bashu é a crise do discurso nacional-islâmico.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>A adoção improvável de Bashu pela mulher gilani (Na'i) é filmada como cura mútua: Bashu traumatizado pela guerra encontra presença materna; Na'i, cujo marido está ausente, encontra um filho-espelho. O trauma de guerra e a cura pelo vínculo são explorados com uma delicadeza rara no cinema mundial sobre conflito armado.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- QUIZ 4 -->
+    <div class="quiz-section" id="quiz-4">
+      <h3 class="quiz-title">Quiz — Fase IV</h3>
+      <p class="quiz-desc">Grau de dificuldade: <strong>DIFÍCIL</strong>. 3 perguntas. Acerte pelo menos 2 para avançar.</p>
+      <div id="quiz-4-content">
+        <div class="quiz-progress-text" id="quiz-4-progress">Pergunta 1 de 3</div>
+        <div id="quiz-4-questions"></div>
+      </div>
+      <div class="quiz-score" id="quiz-4-score">
+        <h3 id="quiz-4-score-title"></h3>
+        <div class="score-bar"><div class="score-fill" id="quiz-4-score-bar"></div></div>
+        <p id="quiz-4-score-text"></p>
+        <button class="unlock-btn" id="quiz-4-unlock" onclick="unlockPhase(5)">Desbloquear Fase V →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ PHASE 5 ═══════════════════════ -->
+<section class="phase-section phase-bg-1 locked fade-in" id="phase-5" data-phase-anchor="5">
+  <div class="section-container">
+    <div class="phase-header">
+      <div class="phase-number">V</div>
+      <div class="phase-info">
+        <div class="phase-era">1990 – 1997</div>
+        <h2 class="phase-title">A Idade de Ouro:<br><em>Kiarostami no topo, Close-Up e Palme d'Or</em></h2>
+        <p>A primeira metade dos anos 90 é o apogeu do cinema iraniano no mundo. Close-Up, Através das Oliveiras, Gosto de Cereja (Palme d'Or 1997): Kiarostami desfaz as fronteiras entre real e ficção. Makhmalbaf filma O Momento da Inocência. O Irã torna-se uma potência cinematográfica reconhecida globalmente.</p>
+      </div>
+    </div>
+
+    <p>Em <strong>1990</strong>, Abbas Kiarostami lança <em>Close-Up</em> e o cinema mundial nunca mais é o mesmo. Um homem real, Hossein Sabzian, fingiu ser o diretor Mohsen Makhmalbaf para enganar uma família burguesa de Teerã — e foi preso. Kiarostami filmou o julgamento real, encenou as cenas do crime com os participantes reais, e juntou tudo num filme que é ao mesmo tempo documentário, ficção, tribunal filosófico e poema sobre a necessidade de ser outro.</p>
+
+    <p>A <strong>trilogia de Koker</strong> foi concluída com <em>Através das Oliveiras</em> (1994), onde Kiarostami filma um ator que usou nos filmes anteriores tentando se declarar para sua colega de elenco — fundindo três níveis de realidade num único plano. O cinema que fala de si mesmo falando de amor e terremoto.</p>
+
+    <p>Em <strong>1997</strong>, <em>Gosto de Cereja</em> ganha a Palma de Ouro em Cannes. Um homem dirige por Teerã procurando alguém que o ajude a morrer. A câmera observa. O filme recusa o melodrama sobre o suicídio — em vez disso, faz uma meditação sobre o desejo de existir, sobre o gosto da cereja que pode mudar uma decisão irrevogável.</p>
+
+    <div class="films-grid">
+
+      <!-- CLOSE-UP -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Close_Up_%281990%29.webm/320px--Close_Up_%281990%29.webm.jpg" alt="Close-Up 1990 Kiarostami" onerror="this.parentElement.style.background='linear-gradient(135deg,#10101a,#1a1a30)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.9;">
+          <div class="film-year-badge">1990</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">Close-Up</div>
+          <div class="film-original">Namay-e Nazdik</div>
+          <div class="film-director">Dir: Abbas Kiarostami</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-pol">Política</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>Close-Up é o filme mais rigoroso sobre a questão da identidade já realizado. Sabzian <em>é</em> Makhmalbaf no único sentido que importa: ele internalizou a obra do diretor, pensa com ela, sente com ela. Kiarostami parece dizer com Rimbaud: <em>Je est un autre</em> — o eu é sempre uma ficção que habitamos. O julgamento de Sabzian é o julgamento de toda pessoa que escolhe ser mais do que seu nascimento determinava.</p>
+            </div>
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>A classe social é o verdadeiro crime de Sabzian: um homem pobre, desempregado, amante de cinema, numa sociedade que não tem espaço para essa subjetividade. A família rica que ele enganou não perdeu dinheiro — perdeu a ilusão de que pertencia a um mundo cultural elevado. O tribunal iraniano julga a fraude; Kiarostami julga o sistema que produz Sabzians.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>Do ponto de vista lacaniano, Sabzian assume a identidade de Makhmalbaf porque o cinema — especificamente, o cinema de Makhmalbaf — lhe oferece um <em>Ideal do Eu</em> que a vida real nunca ofereceu. O "engano" é uma tentativa desesperada de alinhar seu <em>eu real</em> com seu <em>eu ideal</em>. A cena final de reencontro entre Sabzian e Makhmalbaf é uma das mais emocionantes da história do cinema precisamente porque encena essa reunificação impossível.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- O MOMENTO DA INOCÊNCIA -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1490750967868-88df5691cc42?w=600&q=80&fit=crop" alt="Bread and flower moment of innocence" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0e06,#301a08)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.8;filter:sepia(20%);">
+          <div class="film-year-badge">1995</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">O Momento da Inocência</div>
+          <div class="film-original">Nun va goldun</div>
+          <div class="film-director">Dir: Mohsen Makhmalbaf</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-pol">Política</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>Makhmalbaf encenou, com o policial que ele feriu aos 17 anos, a memória da violência política de sua juventude. A cena final — o policial que levou uma faca leva agora um pão; o jovem Makhmalbaf que levou uma faca leva agora uma flor — é uma das mais belas encenações cinematográficas da ideia benjaminiana de <em>redenção do passado</em>: não apagar o que foi, mas rencenê-lo de outro modo.</p>
+            </div>
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>O filme é uma interrogação pública de Makhmalbaf sobre sua própria formação política: como um jovem de 17 anos chegou a esfaquear um policial? O que a revolução fez de nós? O que faz um ideal político de um corpo jovem? É um dos raros filmes que realiza autocrítica política genuína sem cair em denuncismo ou auto-flagelação.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GOSTO DE CEREJA -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1528828185978-6c8820a55c8b?w=600&q=80&fit=crop" alt="Cherry tree taste of cherry" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a1008,#2a1a0a)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.8;filter:sepia(15%);">
+          <div class="film-year-badge">1997</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">Gosto de Cereja</div>
+          <div class="film-original">Ta'm-e guilass</div>
+          <div class="film-director">Dir: Abbas Kiarostami</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>O filme é uma meditação sobre o argumento camusiano contra o suicídio — não a partir de uma posição moral, mas fenomenológica. O taxidermista turco que convence Badii a não morrer apela ao gosto das cerejas, à beleza da madrugada, ao pássaro que canta antes do dia. Kiarostami defende a vida com os argumentos mais fracos possíveis — e por isso são os mais verdadeiros.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>O que vemos de Badii é apenas seu comportamento — nunca sabemos por que quer morrer. Este silêncio é clinicamente preciso: o suicídio raramente tem uma "razão" narrativamente satisfatória. O que o velho taxidermista oferece não é uma razão para viver, mas uma experiência sensorial que ancora no presente — cereja, canto de pássaro, luz do amanhecer. Mindfulness avant la lettre como antídoto à morte.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- QUIZ 5 -->
+    <div class="quiz-section" id="quiz-5">
+      <h3 class="quiz-title">Quiz — Fase V</h3>
+      <p class="quiz-desc">Grau de dificuldade: <strong>DIFÍCIL</strong>. 3 perguntas. Acerte pelo menos 2 para avançar.</p>
+      <div id="quiz-5-content">
+        <div class="quiz-progress-text" id="quiz-5-progress">Pergunta 1 de 3</div>
+        <div id="quiz-5-questions"></div>
+      </div>
+      <div class="quiz-score" id="quiz-5-score">
+        <h3 id="quiz-5-score-title"></h3>
+        <div class="score-bar"><div class="score-fill" id="quiz-5-score-bar"></div></div>
+        <p id="quiz-5-score-text"></p>
+        <button class="unlock-btn" id="quiz-5-unlock" onclick="unlockPhase(6)">Desbloquear Fase VI →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ PHASE 6 ═══════════════════════ -->
+<section class="phase-section phase-bg-2 locked fade-in" id="phase-6" data-phase-anchor="6">
+  <div class="section-container">
+    <div class="phase-header">
+      <div class="phase-number">VI</div>
+      <div class="phase-info">
+        <div class="phase-era">1997 – 2004</div>
+        <h2 class="phase-title">A Era Khatami:<br><em>abertura, vozes femininas e o cinema social</em></h2>
+        <p>A eleição do presidente reformista Mohammad Khatami em 1997 abre uma janela de relativa liberdade. Emergem vozes femininas (Samira Makhmalbaf, Rakhshan Bani-Etemad), filmes sobre jovens iranianos e uma crítica social mais direta. Jafar Panahi revela-se como voz essencial.</p>
+      </div>
+    </div>
+
+    <p>Com Khatami, a censura afrouxou marginalmente — e o cinema respondeu com uma criatividade explosiva. <strong>Jafar Panahi</strong> estreara em 1995 com <em>O Balão Branco</em> (roteiro de Kiarostami) e tornava-se o mais político dos grandes cineastas iranianos: <em>O Espelho</em>, <em>O Círculo</em>, <em>Crimson Gold</em> — cada filme uma câmara de escuta dos humilhados iranianos.</p>
+
+    <p><strong>Samira Makhmalbaf</strong>, filha de Mohsen, estreou em Cannes aos 18 anos com <em>A Maçã</em> (1998) — um filme sobre duas meninas mantidas em cativeiro pelo próprio pai, rodado com as pessoas reais do caso real. Com <em>O Quadro-Negro</em> (2000), foi ainda mais longe: professores curdos carregam quadros-negros nas montanhas, procurando alguém que queira aprender. A educação como missão quixotesca num mundo em guerra.</p>
+
+    <p><strong>Rakhshan Bani-Etemad</strong>, a grande dama do cinema social iraniano, filmava mulheres reais em situações reais — a prostituta, a pobre, a esposa abandonada — com uma câmera documental que recusava tanto o glamour quanto a vitimização.</p>
+
+    <div class="films-grid">
+
+      <!-- O CIRCULO -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=600&q=80&fit=crop" alt="Circle bars confinement" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0808,#2a1010)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.65;filter:grayscale(40%);">
+          <div class="film-year-badge">2000</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">O Círculo</div>
+          <div class="film-original">Dayereh</div>
+          <div class="film-director">Dir: Jafar Panahi</div>
+          <div class="film-tags">
+            <span class="tag tag-fil">Filosofia</span>
+            <span class="tag tag-pol">Política</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>O título é o programa: mulheres num círculo sem saída. A estrutura circular do filme — começa e termina numa prisão — encena a tese sartreana de que "o inferno são os outros" aplicada ao gênero: o corpo feminino como território de vigilância e punição. A liberdade é a questão filosófica central, e o filme responde com rigor brutal: não existe.</p>
+            </div>
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>Panahi filma mulheres que fumam, viajam sozinhas, foram presas, foram prostituídas — os corpos que o estado islâmico classifica como transgressores. Cada mulher que acompanhamos passa o testemunho para outra, como num revezamento de opressão. O Lions' Gate, prêmio em Veneza, transformou o filme em documento político internacional sobre a situação da mulher no Irã.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>A estrutura em anel do filme mimetiza a experiência psicológica do encarceramento e da vigilância: a sensação de que não importa para onde se vá, os muros acompanham. Panahi filma o que Foucault teorizou — o panóptico interiorizado — mas de dentro, com rostos humanos, sem abstração teórica.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- O QUADRO-NEGRO -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1464207687429-7505649dae38?w=600&q=80&fit=crop" alt="Mountain path blackboard" onerror="this.parentElement.style.background='linear-gradient(135deg,#0a0a14,#141430)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.7;filter:grayscale(20%);">
+          <div class="film-year-badge">2000</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">O Quadro-Negro</div>
+          <div class="film-original">Takhté Siah</div>
+          <div class="film-director">Dir: Samira Makhmalbaf</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-pol">Política</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>O quadro-negro que os professores carregam é simultaneamente fardo e escudo — usado para se proteger de disparos. A educação como proteção física é uma inversão absurdista-poética: o saber como armadura contra a bala. Samira questiona o que significa ensinar num mundo onde o conhecimento não impede a morte, mas talvez a adie.</p>
+            </div>
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>Filmado na fronteira Irã-Iraque durante as operações de limpeza química dos curdos, o filme é um documento político sobre o povo curdo — sem cidadania plena em nenhum dos estados que habitam. Os refugiados curdos que os professores encontram recusam a educação: sobrevivência trumps aprendizado. A crítica ao estado-nação como forma de organização humana está implícita em cada quadro.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CRIMSON GOLD -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600&q=80&fit=crop" alt="Tehran city night gold" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0808,#1e0a0a)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.7;filter:sepia(20%) hue-rotate(10deg);">
+          <div class="film-year-badge">2003</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">Ouro Carmesim</div>
+          <div class="film-original">Talaye sorkh</div>
+          <div class="film-director">Dir: Jafar Panahi</div>
+          <div class="film-tags">
+            <span class="tag tag-pol">Política</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>Hussein é um entregador de pizza veterano de guerra que tenta roubar uma joalheria. O roteiro de Kiarostami e a direção de Panahi transformam este crime de classe em tragédia grega: o herói que não suporta a humilhação sistemática. A joalheria que não vende para ele, a festa de ricos que ele testemunha — a fratura de classe iraniana filmada com impiedade marxista.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>Hussein apresenta sinais claros de PTSD de guerra combinados com humilhação crônica de classe — uma combinação explosiva que a sociedade iraniana produziu em massa mas recusa reconhecer. Sua violência final não é insanidade: é a lógica consequência de um sujeito que foi sistematicamente privado de reconhecimento. Honneth sobre a luta por reconhecimento filmado como noir.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- QUIZ 6 -->
+    <div class="quiz-section" id="quiz-6">
+      <h3 class="quiz-title">Quiz — Fase VI</h3>
+      <p class="quiz-desc">Grau de dificuldade: <strong>DIFÍCIL</strong>. 3 perguntas. Acerte pelo menos 2 para avançar.</p>
+      <div id="quiz-6-content">
+        <div class="quiz-progress-text" id="quiz-6-progress">Pergunta 1 de 3</div>
+        <div id="quiz-6-questions"></div>
+      </div>
+      <div class="quiz-score" id="quiz-6-score">
+        <h3 id="quiz-6-score-title"></h3>
+        <div class="score-bar"><div class="score-fill" id="quiz-6-score-bar"></div></div>
+        <p id="quiz-6-score-text"></p>
+        <button class="unlock-btn" id="quiz-6-unlock" onclick="unlockPhase(7)">Desbloquear Fase VII →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ PHASE 7 ═══════════════════════ -->
+<section class="phase-section phase-bg-1 locked fade-in" id="phase-7" data-phase-anchor="7">
+  <div class="section-container">
+    <div class="phase-header">
+      <div class="phase-number">VII</div>
+      <div class="phase-info">
+        <div class="phase-era">2004 – 2011</div>
+        <h2 class="phase-title">Panahi Preso, Farhadi Emergindo:<br><em>resistência e drama doméstico</em></h2>
+        <p>Ahmadinejad no poder, restrições crescentes, Panahi preso e proibido de filmar. Enquanto isso, Asghar Farhadi emerge com uma nova linguagem do drama doméstico que revela as contradições da sociedade iraniana contemporânea com precisão cirúrgica.</p>
+      </div>
+    </div>
+
+    <p>A eleição de Mahmoud Ahmadinejad em 2005 reverteu os ganhos da era Khatami. A censura endureceu. <strong>Jafar Panahi</strong> foi preso em 2010, condenado a seis anos de prisão e 20 anos de proibição de fazer cinema. Sua resposta: continuou filmando clandestinamente com câmeras menores, dentro de seu apartamento, dentro de seu carro — produzindo obras que são ao mesmo tempo documentos de resistência e experiências radicais de linguagem.</p>
+
+    <p>Enquanto Panahi filmava sua prisão, <strong>Asghar Farhadi</strong> construía uma carreira que o levaria ao Oscar. Farhadi é o dramaturgo da classe média iraniana: seus filmes são câmaras de escuta de conversas impossíveis, de mentiras necessárias, de dilemas morais sem saída. <em>A Respeito de Elly</em> (2009) e <em>Uma Separação</em> (2011) estabeleceram um novo paradigma para o cinema iraniano: drama de câmara, sem mensagem explícita, onde o espectador é forçado a julgar sem jamais ter todos os elementos necessários para julgar.</p>
+
+    <div class="films-grid">
+
+      <!-- ISSO É UM FILME -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1555276255-8e71e0f5f84e?w=600&q=80&fit=crop" alt="Apartment filming phone" onerror="this.parentElement.style.background='linear-gradient(135deg,#0a0a0a,#1a1a20)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.65;filter:grayscale(30%);">
+          <div class="film-year-badge">2011</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">Isso É Um Filme</div>
+          <div class="film-original">In Film Nist</div>
+          <div class="film-director">Dir: Jafar Panahi & Mojtaba Mirtahmasb</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-pol">Política</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>Um diretor proibido de filmar lê seu roteiro para a câmera do celular, encena os movimentos dos personagens em seu apartamento, e então para — porque percebe que se puder descrever o filme inteiramente, não precisaria tê-lo feito. A tese filosófica emerege: cinema é o que excede a linguagem. O que não pode ser dito só pode ser mostrado.</p>
+            </div>
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>Contrabandear um filme num pendrive dentro de um bolo de aniversário e enviá-lo de Teerã para Cannes é um ato político que vale qualquer manifesto. Panahi demonstra que a arte é mais resistente que o estado — e que a proibição é a forma mais alta de homenagem que um regime pode fazer a um artista.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UMA SEPARACAO -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&q=80&fit=crop" alt="Separation courthouse drama" onerror="this.parentElement.style.background='linear-gradient(135deg,#081018,#101828)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.65;filter:grayscale(20%);">
+          <div class="film-year-badge">2011</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">Uma Separação</div>
+          <div class="film-original">Jodaeiye Nader az Simin</div>
+          <div class="film-director">Dir: Asghar Farhadi</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-pol">Política</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>Farhadi constrói um filme sobre a impossibilidade do julgamento: ninguém mente completamente, ninguém diz toda a verdade, e a estrutura institucional (o tribunal) não tem instrumentos para capturar a complexidade moral da vida vivida. É um filme kantiano que desconfia da razão prática: a máxima universal não existe quando cada caso é irredutível à regra.</p>
+            </div>
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>O Oscar de Melhor Filme Estrangeiro de 2012 foi recebido por Farhadi com um discurso político: "Eu represento uma cultura milenar que foi instrumentalizada como ameaça". O filme é profundamente político em sua arquitetura: as duas famílias (classe alta secular vs. classe baixa religiosa) são o Irã dividido; a criança que testemunha tudo sem poder intervir é a geração pós-revolução.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>A filha adolescente Termeh, que testemunha o desmoronamento de seu mundo familiar com olhos abertos demais, é o coração psicológico do filme. Farhadi filma o trauma do divórcio parental com uma precisão clínica rara: a criança que deve escolher entre pais é forçada a uma lealdade dividida que produz cisão identitária. A cena final — ela escolherá? — é deixada em aberto: o trauma não tem resolução narrativa.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOBRE ELLY -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=600&q=80&fit=crop" alt="Seaside Elly mysterious woman" onerror="this.parentElement.style.background='linear-gradient(135deg,#08181a,#102830)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.7;filter:sepia(15%);">
+          <div class="film-year-badge">2009</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">A Respeito de Elly</div>
+          <div class="film-original">Darbareye Elly</div>
+          <div class="film-director">Dir: Asghar Farhadi</div>
+          <div class="film-tags">
+            <span class="tag tag-pol">Política</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>O que começa como uma comédia de classe média iraniana em férias revela-se um thriller sobre as normas sociais que tornam a honestidade impossível. A mentirinha que motiva a viagem — fingir que Elly está livre para um namoro — encadeia uma série de mentiras que terminam em tragédia. Farhadi filma como as convenções sociais iranianas (sobre relacionamentos, sobre honra, sobre mentira protetora) produzem sistemas de encobertamento que esmagam os indivíduos.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>O grupo de amigos que se desfaz diante de uma crise é um estudo de grupo dinâmico: quando o protocolo social falha, emergem as ansiedades e egoísmos que a sociabilidade mantinha reprimidos. A figura de Elly — ausente, morta, nunca totalmente conhecida — funciona como o Real lacaniano: o buraco em torno do qual as ficções sociais se organizam.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- QUIZ 7 -->
+    <div class="quiz-section" id="quiz-7">
+      <h3 class="quiz-title">Quiz — Fase VII</h3>
+      <p class="quiz-desc">Grau de dificuldade: <strong>DIFÍCIL</strong>. 3 perguntas. Acerte pelo menos 2 para avançar.</p>
+      <div id="quiz-7-content">
+        <div class="quiz-progress-text" id="quiz-7-progress">Pergunta 1 de 3</div>
+        <div id="quiz-7-questions"></div>
+      </div>
+      <div class="quiz-score" id="quiz-7-score">
+        <h3 id="quiz-7-score-title"></h3>
+        <div class="score-bar"><div class="score-fill" id="quiz-7-score-bar"></div></div>
+        <p id="quiz-7-score-text"></p>
+        <button class="unlock-btn" id="quiz-7-unlock" onclick="unlockPhase(8)">Desbloquear Fase VIII →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ PHASE 8 ═══════════════════════ -->
+<section class="phase-section phase-bg-2 locked fade-in" id="phase-8" data-phase-anchor="8">
+  <div class="section-container">
+    <div class="phase-header">
+      <div class="phase-number">VIII</div>
+      <div class="phase-info">
+        <div class="phase-era">2011 – 2016</div>
+        <h2 class="phase-title">O Cinema da Diáspora e os<br><em>Filmes Proibidos</em></h2>
+        <p>Cineastas iranianos na diáspora (Marjane Satrapi, Ana Lily Amirpour) criam um contra-cinema iraniano no exterior. Panahi continua filmando clandestinamente. O cinema de gênero surge com "A Girl Walks Home Alone at Night". Kiarostami vai para o Japão.</p>
+      </div>
+    </div>
+
+    <p>A <strong>diáspora iraniana</strong> produz um cinema em duas línguas e dois mundos: Marjane Satrapi adapta <em>Persépolis</em> em animação francesa, tornando a memória da revolução acessível ao mundo. Ana Lily Amirpour filma em inglês, no deserto californiano, com atores americanos de origem iraniana — e inventa um <em>vampire western iraniano</em> que é, ao mesmo tempo, uma fábula sobre gênero e subversão no Oriente Médio.</p>
+
+    <p><strong>Panahi</strong>, proibido, lança <em>Taxi Teerã</em> (2015): ele mesmo dirige seu táxi pela cidade, conversando com passageiros reais, filmando com câmeras escondidas. O filme ganhou o Urso de Ouro em Berlim. Nenhum membro da produção pôde comparecer à cerimônia.</p>
+
+    <p><strong>Kiarostami</strong>, no final da vida, foi para o Japão filmar <em>Like Someone in Love</em> (2012) e para a Itália com <em>Cópia Fiel</em> (2010). Seu cinema tornou-se apatriota — pertencia a um mundo de silêncio e paisagens que transcendia qualquer bandeira.</p>
+
+    <div class="films-grid">
+
+      <!-- PERSEPOLIS -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1536924940846-227afb31e2a5?w=600&q=80&fit=crop" alt="Persepolis animation black white" onerror="this.parentElement.style.background='linear-gradient(135deg,#0a0a0a,#050510)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.7;filter:grayscale(80%);">
+          <div class="film-year-badge">2007</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">Persépolis</div>
+          <div class="film-original">Persepolis</div>
+          <div class="film-director">Dir: Marjane Satrapi & Vincent Paronnaud</div>
+          <div class="film-tags">
+            <span class="tag tag-pol">Política</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>A autobiografia animada de Satrapi é o documento político iraniano mais amplamente visto no mundo: a revolução, a guerra, o exílio, o retorno — tudo através dos olhos de uma menina que colecionava pôsteres de Iron Maiden e lia Marx escondido. É a história que o regime iraniano não pode contar sobre si mesmo, contada pela geração que viveu na própria pele.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>A escolha da animação em preto e branco não é estética — é psicológica: a memória da infância é por natureza uma reelaboração, não um registro. Satrapi filma o que a psicanálise chama de <em>narrativa retroativa</em>: o adulto que vai ao passado para entender como se tornou quem é. A animação é o estilo da memória subjetiva.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAXI TEHRAN -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=600&q=80&fit=crop" alt="Taxi Tehran city night" onerror="this.parentElement.style.background='linear-gradient(135deg,#0e0e0a,#1a1a10)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.7;filter:sepia(20%);">
+          <div class="film-year-badge">2015</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">Taxi Teerã</div>
+          <div class="film-original">Taxi</div>
+          <div class="film-director">Dir: Jafar Panahi</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-pol">Política</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>O táxi é a câmera obscura da sociedade iraniana: num espaço fechado, pessoas de todos os estratos falam sem inibição porque se acham anonimizadas pelo movimento. Panahi transforma este espaço de confissão involuntária em testemunho coletivo. A filosofia do filme é socratica: perguntar enquanto se dirige é o método da maiêutica aplicado ao trânsito de Teerã.</p>
+            </div>
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>Um diretor proibido de fazer filmes faz um filme sobre ser um diretor proibido de fazer filmes — e ganha o prêmio mais importante do cinema europeu. A recursividade é o argumento político: o cinema que denuncia sua própria impossibilidade é o único cinema possível sob certas condições. Brechtianismo involuntário nascido da necessidade.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- A GIRL WALKS HOME ALONE AT NIGHT -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1476611317561-60117649dd94?w=600&q=80&fit=crop" alt="Night noir dark atmospheric" onerror="this.parentElement.style.background='linear-gradient(135deg,#050508,#0a0a10)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.65;filter:grayscale(70%);">
+          <div class="film-year-badge">2014</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">A Garota Volta para Casa Sozinha à Noite</div>
+          <div class="film-original">A Girl Walks Home Alone at Night</div>
+          <div class="film-director">Dir: Ana Lily Amirpour</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>A vampira de hijab que pune homens violentos é uma figura filosoficamente densa: ela é ao mesmo tempo a opressão (o hijab) e a libertação (poder noturno feminino). Amirpour cria uma alegoria do feminino iraniano que recusa tanto a vitimização quanto a heroicização simples — a vampira é predadora, predatória, e moralmente ambígua.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>O vampirismo como metáfora do desejo feminino reprimido que retorna como ameaça: o que foi drenado da mulher iraniana (liberdade de movimento, expressão, sexualidade) retorna como figura que drena os outros. A psicologia do retorno do reprimido em forma de horror gótico — um processo de elaboração simbólica do trauma coletivo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- QUIZ 8 -->
+    <div class="quiz-section" id="quiz-8">
+      <h3 class="quiz-title">Quiz — Fase VIII</h3>
+      <p class="quiz-desc">Grau de dificuldade: <strong>DIFÍCIL</strong>. 3 perguntas. Acerte pelo menos 2 para avançar.</p>
+      <div id="quiz-8-content">
+        <div class="quiz-progress-text" id="quiz-8-progress">Pergunta 1 de 3</div>
+        <div id="quiz-8-questions"></div>
+      </div>
+      <div class="quiz-score" id="quiz-8-score">
+        <h3 id="quiz-8-score-title"></h3>
+        <div class="score-bar"><div class="score-fill" id="quiz-8-score-bar"></div></div>
+        <p id="quiz-8-score-text"></p>
+        <button class="unlock-btn" id="quiz-8-unlock" onclick="unlockPhase(9)">Desbloquear Fase IX →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ PHASE 9 ═══════════════════════ -->
+<section class="phase-section phase-bg-1 locked fade-in" id="phase-9" data-phase-anchor="9">
+  <div class="section-container">
+    <div class="phase-header">
+      <div class="phase-number">IX</div>
+      <div class="phase-info">
+        <div class="phase-era">2016 – 2022</div>
+        <h2 class="phase-title">Farhadi, Oscar e as Contradições<br><em>do cinema globalizado</em></h2>
+        <p>Farhadi conquista segundo Oscar com O Vendedor. O cinema iraniano globalize-se mas perde algo de sua especificidade. Surge uma nova geração de cineastas. Mohammad Rasoulof filma clandestinamente e ganha Cannes. A morte de Kiarostami em 2016 encerra uma era.</p>
+      </div>
+    </div>
+
+    <p>Em 2016, <strong>Abbas Kiarostami</strong> morreu em Paris, aos 76 anos. Com ele foi a convicção de que o cinema pode ser simultâneamente simples e infinito. Seu legado — um método, uma ética do olhar, uma recusa de toda manipulação — continuará formando cineastas por gerações.</p>
+
+    <p><strong>Asghar Farhadi</strong> ganhou seu segundo Oscar com <em>O Vendedor</em> (2016), desta vez numa cerimônia marcada pela política: proibido de entrar nos EUA pelo decreto de imigração de Trump, enviou uma mensagem lida na cerimônia. O cinema iraniano na política global, não apenas na política interna.</p>
+
+    <p><strong>Mohammad Rasoulof</strong> tornou-se o novo dissidente: seu <em>Não Existe Mal</em> (2020) — quatro histórias sobre a pena de morte e a culpa coletiva — ganhou o Urso de Ouro em Berlim enquanto ele estava proibido de sair do Irã. O cinema iraniano da resistência continuava sua tradição de fazer o impossível possível.</p>
+
+    <div class="films-grid">
+
+      <!-- O VENDEDOR -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=600&q=80&fit=crop" alt="Theater stage drama Farhadi" onerror="this.parentElement.style.background='linear-gradient(135deg,#101008,#1a1810)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.7;filter:sepia(25%);">
+          <div class="film-year-badge">2016</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">O Vendedor</div>
+          <div class="film-original">Forushande</div>
+          <div class="film-director">Dir: Asghar Farhadi</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>A encenação paralela de <em>Morte de um Caixeiro Viajante</em> (Arthur Miller) não é decorativa: Farhadi usa a peça como espelho filosófico do drama doméstico. Willy Loman e Emad compartilham a mesma patologia — o amor-próprio masculino construído sobre ilusões que a realidade desfaz. A vingança que Emad planeja é a vingança de Willy contra uma realidade que não reconhece sua dignidade.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>O centro psicológico do filme é a reação de Emad ao trauma de sua esposa: ele não consegue ajudá-la a processar porque o trauma dela ativa seu próprio narcisismo ferido. A violência sofrida pela mulher torna-se, na mente do marido, uma questão de honra masculina — uma apropriação do trauma alheio que é em si uma segunda violência. Farhadi é clínico na precisão deste mecanismo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NAO EXISTE MAL -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1527430253228-e93688616381?w=600&q=80&fit=crop" alt="Dark moral choice execution" onerror="this.parentElement.style.background='linear-gradient(135deg,#080810,#0e0e1a)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.6;filter:grayscale(50%);">
+          <div class="film-year-badge">2020</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">Não Existe Mal</div>
+          <div class="film-original">Sheytan vojud nadarad</div>
+          <div class="film-director">Dir: Mohammad Rasoulof</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-pol">Política</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>O filme é um tratado sobre o mal banal (Hannah Arendt): quatro histórias sobre homens que participam do sistema de execução — como carrascos, como guardas, como cúmplices silenciosos. Rasoulof questiona radicalmente a ideia de que "seguir ordens" é uma desculpa moral. Mas também recusa o conforto da condenação fácil: mostra os mecanismos sistêmicos que produzem executores.</p>
+            </div>
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>Dirigido por alguém proibido de sair do Irã, sobre um tema (pena de morte) que o estado iraniano considera soberano e não negociável — o ato político de Rasoulof é a existência do filme. Cada uma das quatro histórias representa um grau diferente de cumplicidade com o estado: da participação direta à fuga. É uma cartografia moral da resistência possível.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COPIA FIEL -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600&q=80&fit=crop" alt="Italian village certified copy" onerror="this.parentElement.style.background='linear-gradient(135deg,#141008,#201a10)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.75;filter:sepia(20%);">
+          <div class="film-year-badge">2010</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">Cópia Fiel</div>
+          <div class="film-original">Copie conforme</div>
+          <div class="film-director">Dir: Abbas Kiarostami</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>A questão central do livro que James Miller lançou — se uma cópia tem o mesmo valor que um original — é literalizada no próprio filme: num determinado momento, dois desconhecidos começam a se comportar como um casal antigo, sem que saibamos se são ou não. A pergunta filosófica torna-se ontológica: o que é real no relacionamento? O histórico ou o presente?</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>A mutação inexplicável dos personagens (de desconhecidos a casal) pode ser lida como um mecanismo de <em>role play</em> ou como uma <em>psicose breve compartilhada</em>. Mas Kiarostami propõe outra leitura: todo relacionamento é uma performance que vai se tornando real através da repetição. O amor é uma cópia que se torna original pelo uso.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- QUIZ 9 -->
+    <div class="quiz-section" id="quiz-9">
+      <h3 class="quiz-title">Quiz — Fase IX</h3>
+      <p class="quiz-desc">Grau de dificuldade: <strong>DIFÍCIL</strong>. 3 perguntas. Acerte pelo menos 2 para avançar.</p>
+      <div id="quiz-9-content">
+        <div class="quiz-progress-text" id="quiz-9-progress">Pergunta 1 de 3</div>
+        <div id="quiz-9-questions"></div>
+      </div>
+      <div class="quiz-score" id="quiz-9-score">
+        <h3 id="quiz-9-score-title"></h3>
+        <div class="score-bar"><div class="score-fill" id="quiz-9-score-bar"></div></div>
+        <p id="quiz-9-score-text"></p>
+        <button class="unlock-btn" id="quiz-9-unlock" onclick="unlockPhase(10)">Desbloquear Fase X →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ PHASE 10 ═══════════════════════ -->
+<section class="phase-section phase-bg-2 locked fade-in" id="phase-10" data-phase-anchor="10">
+  <div class="section-container">
+    <div class="phase-header">
+      <div class="phase-number">X</div>
+      <div class="phase-info">
+        <div class="phase-era">2022 – Presente</div>
+        <h2 class="phase-title">Mulher, Vida, Liberdade:<br><em>o cinema iraniano na era do levante</em></h2>
+        <p>A morte de Mahsa Amini em 2022 e o movimento "Mulher, Vida, Liberdade" mudam tudo. Rasoulof foge para a Europa. Uma nova geração de cineastas iranianos — muitos em exílio ou semiclandestinos — cria um cinema de urgência, raiva e esperança que é o capítulo mais emocionante desta história ainda em andamento.</p>
+      </div>
+    </div>
+
+    <p>Em setembro de 2022, <strong>Mahsa (Jina) Amini</strong> foi morta pela polícia da moral iraniana. O levante que se seguiu — <em>Zan, Zendegi, Azadi</em> (Mulher, Vida, Liberdade) — sacudiu o regime e o mundo. Cineastas iranianos foram às ruas filmando. Atores e diretoras apareceram sem hijab em público. Muitos foram presos.</p>
+
+    <p><strong>Mohammad Rasoulof</strong>, já com pena de prisão suspensa, foi condenado a 8 anos após lançar <em>The Seed of the Sacred Fig</em> (2024) — um filme sobre um investigador do regime cujas filhas se juntam aos protestos. Rasoulof fugiu para a Alemanha antes de ser preso; o filme ganhou o Prêmio Especial do Júri em Cannes 2024.</p>
+
+    <p>Esta fase ainda está sendo escrita. O cinema iraniano, como sempre fez, está transformando a catástrofe em arte — não para escapar da realidade, mas para olhá-la mais de frente do que qualquer câmera de vigilância poderia.</p>
+
+    <div class="highlight-box">
+      "Eles podem nos proibir de filmar. Não podem nos proibir de ver." — Jafar Panahi
+    </div>
+
+    <div class="films-grid">
+
+      <!-- THE SEED OF THE SACRED FIG -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1591985666643-9b7b2c29be74?w=600&q=80&fit=crop" alt="Protest woman life freedom Iran" onerror="this.parentElement.style.background='linear-gradient(135deg,#0a0808,#140e0e)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.65;filter:grayscale(30%);">
+          <div class="film-year-badge">2024</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">A Semente da Figueira Sagrada</div>
+          <div class="film-original">Dane-ye anjir-e ma'abed</div>
+          <div class="film-director">Dir: Mohammad Rasoulof</div>
+          <div class="film-tags">
+            <span class="tag tag-pol">Política</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>Um investigador que recebe uma arma do estado para usar "quando necessário" — e cujas filhas participam dos protestos de 2022. Rasoulof filma o núcleo do autoritarismo: como ele coloniza o espaço doméstico, transforma pais em agentes do estado e filhos em inimigos. A família como campo de batalha político — a última e mais íntima frente do regime.</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>O pai que teme por seu cargo enquanto suas filhas arriscam a vida é um estudo sobre como o trauma institucional (medo do estado) destrói o vínculo parental. Rasoulof filma a dissociação moral do servidor do regime: para sobreviver no sistema, ele deve desligar a empatia — exatamente a capacidade que permitiria ser pai. Uma tragédia de duplo vínculo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NO BEARS -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1511497584788-876760111969?w=600&q=80&fit=crop" alt="Forest misty border no bears" onerror="this.parentElement.style.background='linear-gradient(135deg,#0a1008,#0e1a10)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.75;filter:grayscale(20%);">
+          <div class="film-year-badge">2022</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">Sem Ursos</div>
+          <div class="film-original">Khers nist</div>
+          <div class="film-director">Dir: Jafar Panahi</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-pol">Política</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>O título refere-se a um medo que não existe mas que paralisa: "há ursos nesta floresta?" — "não, mas há o medo de ursos". Panahi filma a paralisia coletiva produzida pelo medo irracional como mecanismo de controle. É um filme sobre superstição como política: o regime não precisa de violência real quando a ameaça imaginária é suficiente para conter os corpos.</p>
+            </div>
+            <div class="analysis-block pol">
+              <h5>🔴 Leitura Política</h5>
+              <p>Panahi faz a si mesmo personagem: um diretor que dirige remotamente um filme na Turquia enquanto vive numa aldeia fronteiriça. A fronteira — física, política, artística — é o tema. Filmado antes de sua última prisão (outubro de 2022), o filme é uma despedida e uma acusação: mostrar os mecanismos da cumplicidade involuntária com a opressão.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HIT THE ROAD -->
+      <div class="film-card">
+        <div class="film-poster" style="padding:0; overflow:hidden; position:relative;">
+          <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&q=80&fit=crop" alt="Road journey hit the road Iran" onerror="this.parentElement.style.background='linear-gradient(135deg,#101820,#182030)';this.style.display='none'" style="width:100%;height:100%;object-fit:cover;opacity:0.8;filter:sepia(10%);">
+          <div class="film-year-badge">2021</div>
+        </div>
+        <div class="film-body">
+          <div class="film-title">Siga em Frente</div>
+          <div class="film-original">Jadde khaki</div>
+          <div class="film-director">Dir: Panah Panahi</div>
+          <div class="film-tags">
+            <span class="tag tag-phil">Filosofia</span>
+            <span class="tag tag-psy">Psicologia</span>
+          </div>
+          <button class="film-toggle" onclick="toggleAnalysis(this)">Análise ▾</button>
+          <div class="film-analysis">
+            <div class="analysis-block phil">
+              <h5>🌿 Leitura Filosófica</h5>
+              <p>O filho de Jafar Panahi estreia com um road movie em que uma família leva o filho mais velho ao exílio — sem que o menor saiba. O filho de um diretor proibido filma a separação familiar forçada: a arte como herança, a resistência como tradição familiar. Filosoficamente, o filme é sobre despedida: como se diz adeus ao que se ama quando não se pode dizer que é uma despedida?</p>
+            </div>
+            <div class="analysis-block psy">
+              <h5>🔮 Leitura Psicológica</h5>
+              <p>A família que esconde a verdade do menino pequeno (que o irmão vai embora definitivamente) é um estudo de proteção e revelação: como proteger uma criança da perda sem privá-la da realidade? O filme é extraordinariamente sensível às defesas familiares — o humor, a música, o brincar — como formas de suportar o insuportável sem deixar de vivê-lo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- QUIZ 10 - FINAL -->
+    <div class="quiz-section" id="quiz-10">
+      <h3 class="quiz-title">Quiz Final — Fase X</h3>
+      <p class="quiz-desc">Grau de dificuldade: <strong>DIFÍCIL</strong>. 3 perguntas. Esta é a última fase — complete para receber seu diploma.</p>
+      <div id="quiz-10-content">
+        <div class="quiz-progress-text" id="quiz-10-progress">Pergunta 1 de 3</div>
+        <div id="quiz-10-questions"></div>
+      </div>
+      <div class="quiz-score" id="quiz-10-score">
+        <h3 id="quiz-10-score-title"></h3>
+        <div class="score-bar"><div class="score-fill" id="quiz-10-score-bar"></div></div>
+        <p id="quiz-10-score-text"></p>
+        <button class="unlock-btn" id="quiz-10-unlock" onclick="showDiploma()">Ver Diploma Final 🎓</button>
+      </div>
+    </div>
+
+    <!-- DIPLOMA -->
+    <div id="diploma" style="display:none; text-align:center; padding:4rem 2rem; border:2px solid var(--gold); margin-top:3rem; background: rgba(201,151,58,0.04);">
+      <div style="font-size:3rem; margin-bottom:1rem;">✦ ◆ ✦</div>
+      <div style="font-family:'Noto Nastaliq Urdu',serif; font-size:1.8rem; color:var(--gold); direction:rtl; margin-bottom:1rem;">سینمای ایران</div>
+      <h2 style="font-family:'Playfair Display',serif; font-size:2.5rem; color:var(--gold); margin-bottom:1rem;">Certificado de Conclusão</h2>
+      <p style="font-size:1.2rem; color:var(--parchment); max-width:600px; margin:0 auto 2rem;">
+        Você completou as <strong>10 fases</strong> do Guia do Cinema Iraniano. Percorreu um século de imagens, resistência e beleza — da câmera do Xá ao levante de 2022.
+      </p>
+      <p style="font-style:italic; color:var(--sand); max-width:500px; margin:0 auto;">
+        "O cinema começa com D.W. Griffith e termina com Abbas Kiarostami." — Jean-Luc Godard
+      </p>
+      <div style="margin-top:2rem; font-family:'Crimson Pro',serif; font-size:0.9rem; color:var(--gold); letter-spacing:0.3em; text-transform:uppercase;">
+        Cinéfilo do Cinema Iraniano • Grau: Especialista
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+<footer>
+  <div class="hero-ornament" style="font-size:2rem; margin-bottom:1rem; opacity:0.3;">✦ ◆ ✦</div>
+  <p style="font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--sand); margin-bottom:0.5rem;">Cinema Iraniano — Um Guia</p>
+  <p>Um percurso por um século de imagens que resistiram</p>
+  <p style="margin-top:1rem; font-size:0.8rem;">Projeto cultural independente • Conteúdo livre para fins educacionais</p>
+  <p style="font-size:0.75rem; margin-top:0.5rem; opacity:0.5;">Imagens: Unsplash (licença livre) • Wikimedia Commons PD-Iran • Close-Up frame © domínio público (Lei de Direitos Autorais do Irã)</p>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════
+// QUIZ DATA — 10 PHASES, 3 QUESTIONS EACH
+// ═══════════════════════════════════════════════════
+const quizData = {
+  1: [
+    {
+      q: "Qual foi o evento histórico que marcou a chegada do cinema ao Irã em 1900?",
+      opts: [
+        "A abertura da primeira sala de cinema pública em Teerã por um comerciante",
+        "A compra de uma câmera cinematográfica pelo Xá Mozaffar ad-Din durante viagem à França",
+        "A exibição do filme dos irmãos Lumière no palácio imperial iraniano",
+        "A fundação do primeiro estúdio de cinema persa em Isfahan"
+      ],
+      correct: 1,
+      feedback: "Mozaffar ad-Din Shah Qajar trouxe uma câmera da Europa em 1900, registrando cerimônias da corte — as primeiras imagens cinematográficas iranianas."
+    },
+    {
+      q: "O que distingue 'O Sul da Cidade' (1959) de Farrokh Ghaffari no contexto do cinema iraniano da época?",
+      opts: [
+        "Foi o primeiro filme iraniano a usar som sincronizado",
+        "Foi o primeiro filme iraniano rodado em cores",
+        "Foi o primeiro filme a representar a classe trabalhadora urbana como sujeito político",
+        "Foi o primeiro longa-metragem de ficção produzido no Irã"
+      ],
+      correct: 2,
+      feedback: "Ghaffari, formado em Paris e influenciado pelo neorrealismo, trouxe as câmeras para os becos de Teerã e fez da classe operária — e não da aristocracia — o centro de sua narrativa."
+    },
+    {
+      q: "Qual conceito psicológico mais adequadamente descreve a operação de 'Dokhtar-e Lor' (A Moça de Lor) em relação à identidade nacional iraniana?",
+      opts: [
+        "Sublimação: transformação de pulsões agressivas em arte",
+        "Trauma colonial invertido: o Oriente que narra a si mesmo usando formas do colonizador",
+        "Transferência: projeção de sentimentos inconscientes no objeto filmado",
+        "Narcisismo primário: amor incondicional pela imagem especular da nação"
+      ],
+      correct: 1,
+      feedback: "O filme produz uma identidade nacional usando formas narrativas e técnicas cinematográficas ocidentais — um paradoxo que define muito da modernidade iraniana."
+    }
+  ],
+  2: [
+    {
+      q: "Por que 'A Vaca' (Gav, 1969) de Mehrjui tem uma trajetória histórica paradoxal de censura e liberação?",
+      opts: [
+        "Foi censurado pelos britânicos por representar a indústria petrolífera, depois liberado pelos americanos",
+        "Foi banido pelo governo do Xá, mas elogiado pelo Aiatolá Khomeini como retrato do sofrimento camponês",
+        "Foi proibido por obscenidade, depois liberado após cortes significativos na narrativa",
+        "Foi censurado por ser considerado comunista, depois liberado com a abertura política dos anos 1970"
+      ],
+      correct: 1,
+      feedback: "A ironia histórica máxima: o mesmo filme que o regime Pahlavi proibiu foi aprovado pela República Islâmica. A arte escapa às categorias políticas que tentam domesticá-la."
+    },
+    {
+      q: "O que caracteriza filosoficamente o personagem Qeysar no filme homônimo de Masoud Kimiai (1969)?",
+      opts: [
+        "A submissão à lei do estado como forma de dignidade",
+        "A vingança privada como resposta à falência das instituições de justiça",
+        "O sacrifício pessoal pela coletividade religiosa",
+        "A fuga para o Ocidente como saída da violência tribal"
+      ],
+      correct: 1,
+      feedback: "Qeysar opera fora do estado porque o estado falhou — sua violência é legível dentro do código de 'javanmardi' (cavaleirismo), que precede e transcende a lei estatal."
+    },
+    {
+      q: "Qual foi a importância do Instituto Kanoon para o surgimento do cinema de autor iraniano?",
+      opts: [
+        "Era a escola de cinema oficial do governo do Xá, formando diretores pró-regime",
+        "Era o único local permitido para exibição de filmes estrangeiros no Irã",
+        "Financiava filmes de autor, incluindo os primeiros trabalhos de Kiarostami",
+        "Era o sindicato dos atores que controlava quem poderia aparecer nos filmes"
+      ],
+      correct: 2,
+      feedback: "O Instituto para o Desenvolvimento Intelectual de Crianças e Jovens (Kanoon) foi o berço do cinema de autor iraniano, financiando obras experimentais incluindo os primeiros filmes de Abbas Kiarostami."
+    }
+  ],
+  3: [
+    {
+      q: "Como a Revolução Islâmica de 1979 paradoxalmente contribuiu para a sofisticação estética do cinema iraniano?",
+      opts: [
+        "Aumentando os orçamentos dos filmes ao nacionalizar a indústria cinematográfica",
+        "Importando técnicos e equipamentos europeus para modernizar o cinema",
+        "A censura e restrições forçaram os cineastas a desenvolver linguagem metafórica e uso do fora-de-campo",
+        "Criando escolas de cinema de alto nível inspiradas no modelo soviético"
+      ],
+      correct: 2,
+      feedback: "A proibição de mostrar contato físico, morte direta, e outros elementos forçou os cineastas a desenvolver uma linguagem de elipses, metáforas e fora-de-campo que se tornou a marca estilística mais reconhecível do cinema iraniano."
+    },
+    {
+      q: "O que o filme 'O Corredor' (Davandeh, 1984) de Amir Naderi expressa filosoficamente através do ato de correr?",
+      opts: [
+        "A busca pelo êxito econômico numa sociedade capitalista em formação",
+        "A fuga do Islã em direção à modernidade ocidental representada pelo mar",
+        "O desejo puro e a potência vital antes de qualquer objetivo — resistência como pura cinética",
+        "A devoção religiosa expressa através da disciplina corporal ascética"
+      ],
+      correct: 2,
+      feedback: "Naderi filma o desejo antes de qualquer objeto — correr não para chegar, mas como expressão de vontade vital. É Nietzsche em shorts rasgados: a vontade de potência encarnada num menino de rua."
+    },
+    {
+      q: "Qual foi a significância do Cinema Rex de Abadan (1978) para a Revolução Iraniana?",
+      opts: [
+        "Era o cinema mais luxuoso do Irã, símbolo do excesso da elite Pahlavi",
+        "Seu incêndio, matando 477 pessoas, catalisou a revolução e simbolizou a rejeição ao cinema ocidental",
+        "Foi o único cinema que exibia filmes religiosos islâmicos durante o regime do Xá",
+        "Foi o local onde Khomeini assistiu seu único filme antes do exílio"
+      ],
+      correct: 1,
+      feedback: "A tragédia do Cinema Rex, com 477 mortos, foi usada pelos revolucionários como símbolo da corrupção do regime Pahlavi e alimentou o levante de 1979 — um dos eventos mais sombrios e politicamente explorados da revolução."
+    }
+  ],
+  4: [
+    {
+      q: "Qual é a tese filosófica central de 'Onde Fica a Casa do Meu Amigo?' (1987) em relação à ética?",
+      opts: [
+        "A obediência às autoridades adultas como fundamento da ordem social",
+        "O imperativo categórico kantiano encarnado: agir segundo o dever moral sem necessidade de coerção externa",
+        "O utilitarismo: o bem coletivo justifica as ações individuais",
+        "O relativismo moral: cada cultura tem sua própria definição de correto"
+      ],
+      correct: 1,
+      feedback: "Ahmad sabe o que é certo e age segundo esse saber contra os obstáculos dos adultos — sem que ninguém o obrigue. É o imperativo categórico em ato: a lei moral não precisa de sanção externa."
+    },
+    {
+      q: "O que distingue 'Bashu, o Pequeno Estranho' (1989) de Beizai como documento político iraniano?",
+      opts: [
+        "É o primeiro filme iraniano a criticar diretamente a guerra contra o Iraque",
+        "Revela a diversidade étnica e cultural do Irã, contradizendo o discurso de unidade nacional islâmica",
+        "É o primeiro filme iraniano protagonizado por uma mulher sem véu",
+        "Documenta a discriminação religiosa contra as minorias cristãs do norte do Irã"
+      ],
+      correct: 1,
+      feedback: "Um menino árabe do sul encontra uma família do norte gilani — dois mundos iranianos que o discurso nacional apresenta como uno. Beizai faz da diversidade uma crítica política à ficção da unidade étnica e cultural."
+    },
+    {
+      q: "Qual foi a importância da guerra Irã-Iraque (1980-88) para o cinema iraniano deste período?",
+      opts: [
+        "Forneceu financiamento estatal abundante para filmes de propaganda que fortaleceram o setor",
+        "Produziu um paradoxo: cinema oficial de propaganda e cinema de autor que usava a guerra para investigações filosóficas sobre vida e morte",
+        "Encerrou totalmente a produção cinematográfica por oito anos devido à mobilização da sociedade",
+        "Inspirou exclusivamente filmes sobre heroísmo religioso que definiram o cinema islâmico"
+      ],
+      correct: 1,
+      feedback: "A guerra coexistiu com uma das fases mais ricas do cinema de autor iraniano. Kiarostami filmava crianças em aldeias; Makhmalbaf descobria a arte. A tragédia histórica não paralisa — às vezes catalisa."
+    }
+  ],
+  5: [
+    {
+      q: "Em 'Close-Up' (1990), qual é a tese filosófica mais precisa que Kiarostami desenvolve através do caso Hossein Sabzian?",
+      opts: [
+        "A fraude e o crime são inevitáveis numa sociedade desigual",
+        "A identidade é uma ficção que habitamos — podemos ser mais verdadeiros assumindo uma identidade que não nascemos",
+        "O cinema é sempre mentira, portanto Sabzian não mentiu mais que qualquer ator",
+        "O sistema judicial iraniano é mais humano que se imagina"
+      ],
+      correct: 1,
+      feedback: "Sabzian internalizou a obra de Makhmalbaf e pensa com ela — sua 'mentira' é mais verdadeira que sua identidade de nascimento. Kiarostami faz do caso uma demonstração de que o eu é sempre uma ficção que habitamos."
+    },
+    {
+      q: "Por que 'Gosto de Cereja' (1997) é considerado um filme sobre suicídio filosoficamente diferente do esperado?",
+      opts: [
+        "Porque defende explicitamente o direito ao suicídio como decisão individual soberana",
+        "Porque mostra as consequências do suicídio nas famílias e comunidades",
+        "Porque recusa o melodrama e defende a vida com argumentos fenomenológicos mínimos — o sabor, a luz, o pássaro",
+        "Porque apresenta o suicídio como ato político legítimo contra a opressão do regime"
+      ],
+      correct: 2,
+      feedback: "Kiarostami não argumenta contra o suicídio com razões filosóficas — usa o gosto das cerejas, o canto de pássaro, a luz do amanhecer. A fenomenologia da experiência sensorial imediata como âncora existencial."
+    },
+    {
+      q: "Qual transformação biográfica fundamental moldou o cinema de Mohsen Makhmalbaf, que se torna explícita em 'O Momento da Inocência' (1995)?",
+      opts: [
+        "Sua conversão do islamismo ao ateísmo após a desilusão com a Revolução",
+        "Sua formação em cinema na União Soviética durante os anos 1980",
+        "Sua trajetória de militante islâmico que esfaqueou um policial aos 17 anos, foi preso e, após a revolução, descobriu a arte",
+        "Seu exílio forçado no Afeganistão que transformou sua visão sobre pobreza e guerra"
+      ],
+      correct: 2,
+      feedback: "Makhmalbaf encenou no filme, com o policial real que feriu, a memória dessa violência política. A conversão de militante a artista é o arco que dá sentido a toda sua obra."
+    }
+  ],
+  6: [
+    {
+      q: "Qual estrutura narrativa de 'O Círculo' (2000) de Panahi mimetiza a experiência psicológica da opressão que retrata?",
+      opts: [
+        "A estrutura linear cronológica que mostra causa e efeito da marginalização",
+        "A estrutura circular — começa e termina na prisão — que encena a ausência de saída",
+        "A estrutura em flash-back que revela como cada mulher chegou à sua situação",
+        "A estrutura de documentário direto que registra depoimentos reais de mulheres presas"
+      ],
+      correct: 1,
+      feedback: "O círculo é o programa e a prisão: a forma do filme mimetiza seu conteúdo. Panahi constrói um sistema fechado onde não existe exterior — e esta impossibilidade formal é a tese política do filme."
+    },
+    {
+      q: "O que torna 'Ouro Carmesim' (2003) uma obra politicamente distinta das anteriores de Panahi?",
+      opts: [
+        "É o primeiro filme de Panahi rodado em locações externas ao Irã",
+        "Apresenta um protagonista que é veterano da guerra e entregador de pizza, filmando a fratura de classe com impiedade",
+        "É o primeiro filme iraniano a retratar positivamente a classe média alta",
+        "Apresenta pela primeira vez no cinema iraniano um personagem com deficiência como protagonista"
+      ],
+      correct: 1,
+      feedback: "Hussein, veterano de guerra reconvertido em entregador de pizza, é o produto descartável da república islâmica — serviu para morrer na guerra, agora serve para entregar pizza. Panahi faz de seu crime de classe uma tragédia política."
+    },
+    {
+      q: "O que distingue metodologicamente o filme 'A Maçã' (1998) de Samira Makhmalbaf de outros documentários sobre casos reais?",
+      opts: [
+        "Usa apenas materiais de arquivo e entrevistas posteriores aos fatos, sem encenação",
+        "Reencena o caso real com as pessoas envolvidas logo após o evento, borrando as fronteiras entre documentário e ficção",
+        "É exclusivamente animado, permitindo representar crianças sem exposição de suas identidades",
+        "Foi rodado com câmeras escondidas sem o conhecimento dos participantes"
+      ],
+      correct: 1,
+      feedback: "Samira filmou as duas meninas reais e seus pais reais dias após o escândalo, numa operação de reencenação que é ao mesmo tempo documentário, terapia e ficção — influência direta de Close-Up de Kiarostami."
+    }
+  ],
+  7: [
+    {
+      q: "Qual é o argumento paradoxal central de 'Isso É Um Filme' (2011) de Panahi sobre a natureza do cinema?",
+      opts: [
+        "O cinema é possível em qualquer condição, mesmo com smartphone num apartamento",
+        "Se um filme pode ser totalmente descrito em palavras, não precisaria existir — o cinema é o que excede a linguagem",
+        "A censura estatal é sempre contraproducente porque os artistas encontram outras formas de expressão",
+        "O documentário é mais poderoso que a ficção porque não pode ser proibido"
+      ],
+      correct: 1,
+      feedback: "Panahi para de encenar seu roteiro porque percebe que se puder descrevê-lo completamente, não precisaria tê-lo filmado. O cinema é aquilo que as palavras não alcançam — e este insight nasce da própria proibição de fazê-lo."
+    },
+    {
+      q: "Em 'Uma Separação', qual é a função narrativa e política da filha adolescente Termeh?",
+      opts: [
+        "Ela representa a geração jovem que irá resolver os conflitos de classe da geração anterior",
+        "É a voz da razão islâmica moderada entre os extremos dos pais",
+        "Ela é o Irã pós-revolução que testemunha as contradições dos pais sem poder intervir, forçada a lealdades impossíveis",
+        "Representa a classe média que escolhe o pragmatismo sobre a integridade moral"
+      ],
+      correct: 2,
+      feedback: "Termeh vê tudo, sabe mais que qualquer outro personagem, e deve escolher — mas Farhadi deixa a escolha em aberto. Ela é a geração que recebeu a herança da Revolução sem ter escolhido seus termos."
+    },
+    {
+      q: "O que foi politicamente significativo na recepção do Oscar de 'Uma Separação' (2012)?",
+      opts: [
+        "Foi o primeiro filme de língua não-inglesa a ganhar tanto o Oscar quanto a Palme d'Or no mesmo ano",
+        "Farhadi usou o discurso para defender as negociações nucleares iranianas",
+        "Farhadi representou uma cultura milenar sendo instrumentalizada como ameaça — numa declaração política sobre o discurso ocidental sobre o Irã",
+        "O filme foi exibido comercialmente no Irã sem cortes pela primeira vez na história"
+      ],
+      correct: 2,
+      feedback: "O discurso de Farhadi confrontou diretamente a narrativa ocidental do 'Irã ameaçador', reivindicando para o Irã uma civilização que transcende suas conjunturas políticas."
+    }
+  ],
+  8: [
+    {
+      q: "Qual é a escolha estética fundamental de Marjane Satrapi em 'Persépolis' e sua justificativa psicológica?",
+      opts: [
+        "O preto e branco foi escolhido por limitações orçamentárias que se tornaram um traço estilístico",
+        "A animação em preto e branco é a linguagem da memória subjetiva — reelaboração, não registro objetivo",
+        "O estilo gráfico imita propositalmente os cartazes de propaganda iranianos para subvertê-los",
+        "A ausência de cor refere-se ao luto pela Revolução que não cumpriu suas promessas"
+      ],
+      correct: 1,
+      feedback: "A animação não é a forma mais fácil de contar esta história — é a mais verdadeira. A memória não é documentário; é reelaboração subjetiva. O estilo gráfico faz da forma a própria tese sobre como lembramos."
+    },
+    {
+      q: "Como Panahi utiliza o espaço do táxi em 'Taxi Teerã' (2015) como dispositivo cinematográfico e político?",
+      opts: [
+        "O táxi é um espaço de anonimato onde os passageiros confessam sem filtros, tornando-se câmara de escuta social",
+        "O táxi em movimento simboliza a modernidade iraniana que não consegue parar para se ver",
+        "O táxi é usado como crítica ao transporte público insuficiente no Irã de Ahmadinejad",
+        "O táxi permite filmar sem permissão porque está em espaço público"
+      ],
+      correct: 0,
+      feedback: "No táxi, as pessoas falam porque acham que o motorista não importa — e Panahi-motorista registra tudo. O espaço de trânsito como confessionário involuntário: a sociologia iraniana revelada através do deslocamento."
+    },
+    {
+      q: "Qual é a operação filosófica específica da vampira de hijab em 'A Garota Volta para Casa Sozinha à Noite' (2014)?",
+      opts: [
+        "Desmistifica o hijab mostrando que mulheres muçulmanas têm sexualidade ativa e não reprimida",
+        "Cria uma alegoria do feminino iraniano que é simultaneamente a opressão (hijab) e a libertação (poder predatório noturno)",
+        "Critica o Ocidente ao mostrar que o vampirismo é uma metáfora do imperialismo cultural americano",
+        "Propõe que a religião pode ser subvertida de dentro, usando seus próprios símbolos"
+      ],
+      correct: 1,
+      feedback: "Amirpour recusa tanto vitimização quanto heroicização simples. A vampira usa o hijab — símbolo de controle — como capa noturna de um poder feminino que pune exatamente os que oprimem. A ambiguidade é o argumento."
+    }
+  ],
+  9: [
+    {
+      q: "Por que a morte de Abbas Kiarostami em 2016 representa, segundo muitos críticos, o fim de uma era específica?",
+      opts: [
+        "Porque era o único diretor iraniano que conseguia financiamento internacional para seus filmes",
+        "Porque incorporava um método cinematográfico — câmera como olhar ético, recusa da manipulação, fusão ficção/documentário — que era único e intransferível",
+        "Porque sua morte coincidiu com o endurecimento máximo da censura, tornando o cinema de qualidade impossível",
+        "Porque era o único cineasta iraniano cujos filmes eram exibidos comercialmente dentro do Irã"
+      ],
+      correct: 1,
+      feedback: "Kiarostami não deixou uma escola — deixou um método que só ele podia executar plenamente: a câmera que não julga, a ficção que não mente, o documentário que não trai. Com ele, foi uma forma específica de ver."
+    },
+    {
+      q: "Em 'Não Existe Mal' (2020) de Rasoulof, qual é o argumento filosófico central sobre responsabilidade moral e participação no sistema?",
+      opts: [
+        "Que é impossível ser moralmente puro numa sociedade de controle e que todos são igualmente culpados",
+        "Que seguir ordens é sempre uma desculpa insuficiente — o mal banal (Arendt) exige cumplicidade ativa",
+        "Que a resistência individual é sempre ineficaz contra sistemas de poder estabelecidos",
+        "Que a pena de morte pode ser eticamente justificada em casos extremos de crimes hediondos"
+      ],
+      correct: 1,
+      feedback: "Rasoulof, como Arendt em Eichmann em Jerusalém, questiona a ideia de que 'só estava cumprindo ordens'. Cada história mostra um grau de cumplicidade diferente — e que em todos os graus há escolha moral possível."
+    },
+    {
+      q: "Qual paradoxo filosófico está no centro de 'Cópia Fiel' (2010) de Kiarostami?",
+      opts: [
+        "Uma cópia perfeita de uma obra de arte tem o mesmo valor estético e econômico que o original",
+        "O amor é uma cópia que se torna original pelo uso — e dois estranhos que se comportam como casal podem ser mais casal que o original",
+        "A arte contemporânea é sempre uma cópia de si mesma, num loop de auto-referência sem saída",
+        "A identidade pessoal é uma cópia fiel dos nossos pais e das nossas culturas de origem"
+      ],
+      correct: 1,
+      feedback: "Kiarostami testa em live time a hipótese do livro de James Miller: se dois desconhecidos se comportam como casal por tempo suficiente, em que momento se tornam realmente um casal? A cópia que se torna original é a metáfora do próprio cinema."
+    }
+  ],
+  10: [
+    {
+      q: "O que torna 'A Semente da Figueira Sagrada' (2024) de Rasoulof um documento político sobre o movimento 'Mulher, Vida, Liberdade'?",
+      opts: [
+        "É o primeiro filme a documentar diretamente os protestos de 2022 usando imagens reais das manifestações",
+        "Filma como o autoritarismo coloniza o espaço doméstico — o pai-investigador cujas filhas protestam, revelando a família como última frente política do regime",
+        "Apresenta exclusivamente o ponto de vista das manifestantes, sem representar os agentes do estado",
+        "Foi financiado secretamente pelo governo alemão para desestabilizar o regime iraniano"
+      ],
+      correct: 1,
+      feedback: "Rasoulof não vai às ruas — vai para dentro de uma família. O investigador do regime e suas filhas manifestantes: a fratura política que passa pelo jantar familiar. É a política filmada em seu menor e mais íntimo elemento."
+    },
+    {
+      q: "Qual é a metáfora central do título 'Sem Ursos' (2022) de Panahi e sua implicação política?",
+      opts: [
+        "Os ursos são metáfora dos agentes da repressão que patrulham as aldeias fronteiriças",
+        "O medo de ursos que não existem é o mecanismo pelo qual o controle é exercido — a ameaça imaginária paralisa mais que a real",
+        "Os ursos representam a Rússia como potência que sustenta o regime iraniano",
+        "A ausência de ursos simboliza a extinção da vida selvagem iraniana pelo desenvolvimento industrial"
+      ],
+      correct: 1,
+      feedback: "Panahi filmou antes de sua última prisão um teorema sobre o controle pelo medo irracional. Não é preciso haver ursos — basta que a crença nos ursos paralise. Esta é a lógica do autoritarismo que dispensa a violência constante."
+    },
+    {
+      q: "O que o cinema de Panah Panahi (filho de Jafar) em 'Siga em Frente' (2021) representa em termos de continuidade e herança do cinema iraniano?",
+      opts: [
+        "Uma ruptura total com a tradição do cinema de autor iraniano em direção ao cinema comercial de gênero",
+        "A herança do olhar ético e da resistência como linguagem — o filho de um diretor proibido filmando o exílio como legado familiar",
+        "Uma homenagem nostálgica ao cinema de Kiarostami sem inovação estética própria",
+        "A primeira tentativa de fazer cinema iraniano popular acessível às audiências ocidentais sem comprometer a autenticidade"
+      ],
+      correct: 1,
+      feedback: "Panah Panahi recebeu de seu pai um legado que é ao mesmo tempo estético e político: a câmera como instrumento de dignidade. 'Siga em Frente' é o road movie do exílio filmado por quem não foi — mas acompanhou."
+    }
+  ]
+};
+
+// ═══════════════════════════════════════════════════
+// STATE MANAGEMENT
+// ═══════════════════════════════════════════════════
+const state = {
+  unlockedPhases: new Set([1]),
+  quizProgress: {},
+  quizScores: {}
+};
+
+// Load from localStorage
+try {
+  const saved = localStorage.getItem('cinema_iraniano_state');
+  if (saved) {
+    const parsed = JSON.parse(saved);
+    state.unlockedPhases = new Set(parsed.unlockedPhases || [1]);
+    state.quizProgress = parsed.quizProgress || {};
+    state.quizScores = parsed.quizScores || {};
+  }
+} catch(e) {}
+
+function saveState() {
+  try {
+    localStorage.setItem('cinema_iraniano_state', JSON.stringify({
+      unlockedPhases: [...state.unlockedPhases],
+      quizProgress: state.quizProgress,
+      quizScores: state.quizScores
+    }));
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+function init() {
+  // Apply unlocked phases
+  state.unlockedPhases.forEach(phase => {
+    if (phase > 1) unlockPhaseVisually(phase);
+  });
+
+  // Render quizzes
+  for (let i = 1; i <= 10; i++) {
+    renderQuiz(i);
+    // Restore completed quizzes
+    if (state.quizScores[i] !== undefined) {
+      restoreQuizState(i);
+    }
+  }
+
+  // Update nav dots
+  updateNavDots();
+
+  // Setup scroll listeners
+  setupScrollListeners();
+
+  // Intersection observer for fade-ins
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+}
+
+// ═══════════════════════════════════════════════════
+// QUIZ RENDERING
+// ═══════════════════════════════════════════════════
+function renderQuiz(phaseNum) {
+  const questions = quizData[phaseNum];
+  const container = document.getElementById(`quiz-${phaseNum}-questions`);
+  if (!container) return;
+
+  const progress = state.quizProgress[phaseNum] || { current: 0, answers: [], done: false };
+  const currentQ = progress.current || 0;
+
+  if (currentQ >= questions.length || progress.done) return;
+
+  const q = questions[currentQ];
+  container.innerHTML = `
+    <div class="quiz-question">
+      <p>${q.q}</p>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="quiz-option" onclick="answerQuestion(${phaseNum}, ${i})">${opt}</button>
+        `).join('')}
+      </div>
+      <div class="quiz-feedback" id="quiz-${phaseNum}-feedback-${currentQ}"></div>
+    </div>
+  `;
+
+  document.getElementById(`quiz-${phaseNum}-progress`).textContent = `Pergunta ${currentQ + 1} de ${questions.length}`;
+}
+
+function answerQuestion(phaseNum, chosenIdx) {
+  const progress = state.quizProgress[phaseNum] || { current: 0, answers: [], done: false };
+  const currentQ = progress.current || 0;
+  const questions = quizData[phaseNum];
+  const q = questions[currentQ];
+
+  // Disable all options
+  const container = document.getElementById(`quiz-${phaseNum}-questions`);
+  const buttons = container.querySelectorAll('.quiz-option');
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.correct) btn.classList.add('correct');
+    if (i === chosenIdx && chosenIdx !== q.correct) btn.classList.add('wrong');
+  });
+
+  const isCorrect = chosenIdx === q.correct;
+  progress.answers = progress.answers || [];
+  progress.answers.push(isCorrect);
+
+  const feedback = document.getElementById(`quiz-${phaseNum}-feedback-${currentQ}`);
+  if (feedback) {
+    feedback.textContent = isCorrect ? `✓ Correto! ${q.feedback}` : `✗ Incorreto. ${q.feedback}`;
+    feedback.className = `quiz-feedback ${isCorrect ? 'correct' : 'wrong'}`;
+  }
+
+  progress.current = currentQ + 1;
+  state.quizProgress[phaseNum] = progress;
+
+  setTimeout(() => {
+    if (progress.current >= questions.length) {
+      showQuizResult(phaseNum);
+    } else {
+      renderQuiz(phaseNum);
+    }
+  }, 2200);
+
+  saveState();
+}
+
+function showQuizResult(phaseNum) {
+  const progress = state.quizProgress[phaseNum];
+  const answers = progress.answers || [];
+  const correct = answers.filter(Boolean).length;
+  const total = answers.length;
+  const passed = correct >= 2;
+
+  state.quizScores[phaseNum] = { correct, total, passed };
+  state.quizProgress[phaseNum].done = true;
+  saveState();
+
+  const scoreDiv = document.getElementById(`quiz-${phaseNum}-score`);
+  const titleEl = document.getElementById(`quiz-${phaseNum}-score-title`);
+  const textEl = document.getElementById(`quiz-${phaseNum}-score-text`);
+  const barEl = document.getElementById(`quiz-${phaseNum}-score-bar`);
+  const btnEl = document.getElementById(`quiz-${phaseNum}-unlock`);
+
+  // Hide questions
+  document.getElementById(`quiz-${phaseNum}-content`).style.display = 'none';
+  scoreDiv.classList.add('visible');
+
+  const pct = Math.round((correct / total) * 100);
+  barEl.style.width = pct + '%';
+
+  if (passed) {
+    titleEl.textContent = `${correct}/${total} — Excelente! `;
+    textEl.textContent = phaseNum < 10 
+      ? 'Ótima performance. Avance para a próxima fase do cinema iraniano.'
+      : 'Parabéns! Você completou todas as 10 fases.';
+  } else {
+    titleEl.textContent = `${correct}/${total} — Continue aprendendo`;
+    textEl.textContent = 'Você pode revisar as análises e tentar novamente — ou simplesmente avançar para a próxima fase.';
+    // Add retry button alongside the advance button
+    const retryBtn = document.createElement('button');
+    retryBtn.className = 'unlock-btn visible';
+    retryBtn.textContent = 'Tentar novamente ↺';
+    retryBtn.style.background = '#4a4a4a';
+    retryBtn.style.marginTop = '0.5rem';
+    retryBtn.onclick = () => retryQuiz(phaseNum);
+    scoreDiv.appendChild(retryBtn);
+  }
+  // Always show the advance button
+  if (btnEl) btnEl.classList.add('visible');
+}
+
+function retryQuiz(phaseNum) {
+  state.quizProgress[phaseNum] = { current: 0, answers: [], done: false };
+  state.quizScores[phaseNum] = undefined;
+  saveState();
+
+  const scoreDiv = document.getElementById(`quiz-${phaseNum}-score`);
+  scoreDiv.classList.remove('visible');
+  scoreDiv.innerHTML = `
+    <h3 id="quiz-${phaseNum}-score-title"></h3>
+    <div class="score-bar"><div class="score-fill" id="quiz-${phaseNum}-score-bar"></div></div>
+    <p id="quiz-${phaseNum}-score-text"></p>
+    <button class="unlock-btn" id="quiz-${phaseNum}-unlock" onclick="${phaseNum < 10 ? 'unlockPhase(' + (phaseNum+1) + ')' : 'showDiploma()'}">
+      ${phaseNum < 10 ? 'Desbloquear Fase ' + ['I','II','III','IV','V','VI','VII','VIII','IX','X'][phaseNum] + ' →' : 'Ver Diploma Final 🎓'}
+    </button>
+  `;
+  document.getElementById(`quiz-${phaseNum}-content`).style.display = 'block';
+  renderQuiz(phaseNum);
+}
+
+function restoreQuizState(phaseNum) {
+  const score = state.quizScores[phaseNum];
+  if (!score) return;
+
+  const progress = state.quizProgress[phaseNum];
+  if (progress && progress.done) {
+    showQuizResult(phaseNum);
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// PHASE UNLOCKING
+// ═══════════════════════════════════════════════════
+function unlockPhase(phaseNum) {
+  state.unlockedPhases.add(phaseNum);
+  saveState();
+  unlockPhaseVisually(phaseNum);
+  updateNavDots();
+
+  // Scroll to new phase
+  setTimeout(() => {
+    const el = document.getElementById(`phase-${phaseNum}`);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 300);
+}
+
+function unlockPhaseVisually(phaseNum) {
+  const section = document.getElementById(`phase-${phaseNum}`);
+  if (section) {
+    section.classList.remove('locked');
+  }
+}
+
+function showDiploma() {
+  const diploma = document.getElementById('diploma');
+  if (diploma) {
+    diploma.style.display = 'block';
+    diploma.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// FILM ANALYSIS TOGGLE
+// ═══════════════════════════════════════════════════
+function toggleAnalysis(btn) {
+  const analysis = btn.nextElementSibling;
+  const isOpen = analysis.classList.contains('open');
+  analysis.classList.toggle('open', !isOpen);
+  btn.textContent = isOpen ? 'Análise ▾' : 'Fechar ▴';
+}
+
+// ═══════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════
+function scrollToPhase(phaseNum) {
+  if (phaseNum === 0) {
+    document.getElementById('intro').scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+  const el = document.getElementById(`phase-${phaseNum}`);
+  if (el && !el.classList.contains('locked')) {
+    el.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function setupScrollListeners() {
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    document.getElementById('progress-bar').style.width = pct + '%';
+
+    // Update active phase dot
+    const anchors = document.querySelectorAll('[data-phase-anchor]');
+    let activePhase = 0;
+    anchors.forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight * 0.5) {
+        activePhase = parseInt(el.dataset.phaseAnchor);
+      }
+    });
+    document.querySelectorAll('.phase-dot').forEach(dot => {
+      dot.classList.toggle('active', parseInt(dot.dataset.phase) === activePhase);
+    });
+  });
+}
+
+function updateNavDots() {
+  document.querySelectorAll('.phase-dot').forEach(dot => {
+    const phase = parseInt(dot.dataset.phase);
+    if (phase === 0) return;
+    dot.classList.toggle('unlocked', state.unlockedPhases.has(phase));
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// START
+// ═══════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
